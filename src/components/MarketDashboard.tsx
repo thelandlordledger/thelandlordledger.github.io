@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, Building, Activity, Users } from "lucide-react";
+import { RealEstateAIChat } from "@/components/ui/real-estate-ai-chat";
 
 export const MarketDashboard = () => {
   const marketMetrics = [
@@ -49,8 +50,11 @@ export const MarketDashboard = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6">
         
+        {/* AI Chat Component */}
+        <RealEstateAIChat />
+        
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 mt-20">
           <h2 className="font-primary text-4xl md:text-5xl font-semibold text-foreground mb-4">
             LIVE MARKET INTELLIGENCE
           </h2>
