@@ -11,6 +11,7 @@ import Intelligence from "./pages/Intelligence";
 import About from "./pages/About";
 import AIChat from "./pages/AIChat";
 import Events from "./pages/Events";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/admin/*" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
