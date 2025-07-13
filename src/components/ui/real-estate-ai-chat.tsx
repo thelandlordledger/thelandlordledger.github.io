@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
@@ -73,18 +74,23 @@ function useAutoResizeTextarea({
 
 export function RealEstateAIChat() {
     const [value, setValue] = useState("");
+    const navigate = useNavigate();
     const { textareaRef, adjustHeight } = useAutoResizeTextarea({
         minHeight: 60,
         maxHeight: 200,
     });
 
+    const handleSubmit = () => {
+        if (value.trim()) {
+            const query = encodeURIComponent(value.trim());
+            navigate(`/ai-chat?q=${query}`);
+        }
+    };
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            if (value.trim()) {
-                setValue("");
-                adjustHeight(true);
-            }
+            handleSubmit();
         }
     };
 
@@ -150,6 +156,7 @@ export function RealEstateAIChat() {
                             </button>
                             <button
                                 type="button"
+                                onClick={handleSubmit}
                                 className={cn(
                                     "px-1.5 py-1.5 rounded-lg text-sm transition-colors border border-border hover:border-border/80 hover:bg-muted/50 flex items-center justify-between gap-1",
                                     value.trim()
@@ -175,22 +182,27 @@ export function RealEstateAIChat() {
                     <ActionButton
                         icon={<TrendingUp className="w-4 h-4" />}
                         label="Market Analysis"
+                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What are the current real estate market trends?"))}
                     />
                     <ActionButton
                         icon={<DollarSign className="w-4 h-4" />}
                         label="Property Valuation"
+                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("How do I determine property value?"))}
                     />
                     <ActionButton
                         icon={<MapPin className="w-4 h-4" />}
                         label="Location Insights"
+                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What are the best investment locations right now?"))}
                     />
                     <ActionButton
                         icon={<Building2 className="w-4 h-4" />}
                         label="Investment Opportunities"
+                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What types of real estate investments should I consider?"))}
                     />
                     <ActionButton
                         icon={<Calculator className="w-4 h-4" />}
                         label="ROI Calculator"
+                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("How do I calculate ROI for real estate investments?"))}
                     />
                 </div>
             </div>
@@ -201,12 +213,14 @@ export function RealEstateAIChat() {
 interface ActionButtonProps {
     icon: React.ReactNode;
     label: string;
+    onClick?: () => void;
 }
 
-function ActionButton({ icon, label }: ActionButtonProps) {
+function ActionButton({ icon, label, onClick }: ActionButtonProps) {
     return (
         <button
             type="button"
+            onClick={onClick}
             className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 rounded-full border border-border text-muted-foreground hover:text-foreground transition-colors text-sm"
         >
             {icon}
