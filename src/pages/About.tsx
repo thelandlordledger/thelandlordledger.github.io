@@ -289,7 +289,6 @@ const About = () => {
                 </Card>
               ))}
             </div>
-            </div>
           </div>
         </section>
 
@@ -353,6 +352,7 @@ const About = () => {
                 </Card>
               ))}
             </div>
+          </div>
         </section>
 
         {/* Board & Advisors */}
