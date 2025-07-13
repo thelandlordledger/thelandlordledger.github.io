@@ -1,16 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Search, Bell, User, BarChart3 } from "lucide-react";
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navigation = [
-    { name: "Market Trends", href: "#trends" },
-    { name: "Key Deals", href: "#deals" },
-    { name: "Strategies", href: "#strategies" },
-    { name: "Intelligence", href: "#intelligence" },
-    { name: "About", href: "#about" }
+    { name: "Market Trends", href: "/market-trends" },
+    { name: "Key Deals", href: "/key-deals" },
+    { name: "Strategies", href: "/strategies" },
+    { name: "Intelligence", href: "/intelligence" },
+    { name: "About", href: "/about" }
   ];
 
   return (
@@ -19,26 +21,33 @@ export const Header = () => {
         <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img 
               src="/lovable-uploads/a2a90567-f17c-4437-9cad-9f68e2885544.png" 
               alt="Landlord Ledger" 
               className="h-8 w-auto"
             />
-          </div>
+          </Link>
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="font-accent text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            ))}
+            {navigation.map((item) => {
+              const isActive = location.pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`font-accent text-sm font-medium transition-colors relative group ${
+                    isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                  }`}
+                >
+                  {item.name}
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}></span>
+                </Link>
+              );
+            })}
           </nav>
           
           {/* Right Side Actions */}
@@ -87,16 +96,21 @@ export const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border/50 animate-fade-in-up">
             <nav className="flex flex-col gap-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="font-accent text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
+              {navigation.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`font-accent text-sm font-medium transition-colors py-2 ${
+                      isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
               <div className="flex items-center gap-3 pt-4 border-t border-border/50">
                 <Button variant="ghost" size="sm" className="flex-1">
                   Dashboard
