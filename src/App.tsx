@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import MarketTrends from "./pages/MarketTrends";
 import KeyDeals from "./pages/KeyDeals";
 import Strategies from "./pages/Strategies";
-import Intelligence from "./pages/Intelligence";
 import About from "./pages/About";
 import AIChat from "./pages/AIChat";
 import Events from "./pages/Events";
@@ -27,7 +26,6 @@ const App = () => (
           <Route path="/market-trends" element={<MarketTrends />} />
           <Route path="/key-deals" element={<KeyDeals />} />
           <Route path="/strategies" element={<Strategies />} />
-          <Route path="/intelligence" element={<Intelligence />} />
           <Route path="/about" element={<About />} />
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/events" element={<Events />} />

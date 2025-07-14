@@ -12,7 +12,6 @@ export const Header = () => {
     { name: "Market Trends", href: "/market-trends" },
     { name: "Key Deals", href: "/key-deals" },
     { name: "Strategies", href: "/strategies" },
-    { name: "Intelligence", href: "/intelligence" },
     { name: "Events", href: "/events" },
     { name: "About", href: "/about" }
   ];
