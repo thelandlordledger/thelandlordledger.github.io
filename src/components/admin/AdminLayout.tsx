@@ -14,7 +14,8 @@ import {
   Settings,
   Menu,
   LogOut,
-  Shield
+  Shield,
+  Home
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -76,7 +77,17 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         })}
       </nav>
       
-      <div className="p-4 border-t">
+      <div className="p-4 border-t space-y-2">
+        <Button 
+          variant="outline" 
+          className="w-full justify-start gap-2"
+          asChild
+        >
+          <Link to="/">
+            <Home className="h-4 w-4" />
+            Back to Home
+          </Link>
+        </Button>
         <Button 
           variant="ghost" 
           className="w-full justify-start gap-2"
