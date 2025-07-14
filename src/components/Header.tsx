@@ -28,7 +28,7 @@ export const Header = () => {
             <img 
               src="/lovable-uploads/3073533b-5f25-413c-962c-1e0463d705fd.png" 
               alt="Landlord Ledger" 
-              className="h-15 w-auto"
+              className="h-10 w-auto"
             />
           </Link>
           
