@@ -104,6 +104,66 @@ export type Database = {
         }
         Relationships: []
       }
+      events: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          description: string | null
+          end_date: string | null
+          event_type: string
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          location: string | null
+          organizer: string | null
+          price: number | null
+          published: boolean | null
+          registration_url: string | null
+          start_date: string
+          title: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_type: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          organizer?: string | null
+          price?: number | null
+          published?: boolean | null
+          registration_url?: string | null
+          start_date: string
+          title: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_type?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          organizer?: string | null
+          price?: number | null
+          published?: boolean | null
+          registration_url?: string | null
+          start_date?: string
+          title?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
