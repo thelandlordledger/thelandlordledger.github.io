@@ -17,9 +17,13 @@ export type Database = {
       articles: {
         Row: {
           author_id: string | null
+          author_name: string | null
           category: string
           content: string | null
           created_at: string
+          excerpt: string | null
+          featured: boolean | null
+          featured_order: number | null
           id: string
           image_url: string | null
           metric_value: string | null
@@ -29,12 +33,17 @@ export type Database = {
           subtitle: string | null
           title: string
           updated_at: string
+          view_count: number | null
         }
         Insert: {
           author_id?: string | null
+          author_name?: string | null
           category: string
           content?: string | null
           created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          featured_order?: number | null
           id?: string
           image_url?: string | null
           metric_value?: string | null
@@ -44,12 +53,17 @@ export type Database = {
           subtitle?: string | null
           title: string
           updated_at?: string
+          view_count?: number | null
         }
         Update: {
           author_id?: string | null
+          author_name?: string | null
           category?: string
           content?: string | null
           created_at?: string
+          excerpt?: string | null
+          featured?: boolean | null
+          featured_order?: number | null
           id?: string
           image_url?: string | null
           metric_value?: string | null
@@ -59,6 +73,7 @@ export type Database = {
           subtitle?: string | null
           title?: string
           updated_at?: string
+          view_count?: number | null
         }
         Relationships: []
       }

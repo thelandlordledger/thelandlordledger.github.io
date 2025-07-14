@@ -11,6 +11,8 @@ import About from "./pages/About";
 import AIChat from "./pages/AIChat";
 import Events from "./pages/Events";
 import Admin from "./pages/Admin";
+import MarketAnalysis from "./pages/MarketAnalysis";
+import ArticleDetail from "./pages/ArticleDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/market-analysis" element={<MarketAnalysis />} />
+          <Route path="/article/:slugOrId" element={<ArticleDetail />} />
           <Route path="/admin/*" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

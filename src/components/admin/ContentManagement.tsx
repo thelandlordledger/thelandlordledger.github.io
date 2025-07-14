@@ -1,72 +1,221 @@
-import { useState } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  FileText,
-  Search,
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Calendar,
-  User
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { 
+  Search, 
+  Plus, 
+  Edit, 
+  Eye, 
+  Trash2, 
+  TrendingUp, 
+  FileText, 
+  Target,
+  Newspaper,
+  Star,
+  Clock,
+  User,
+  Calendar
+} from 'lucide-react';
 
+// Content types with their icons and colors
 const contentTypes = [
-  { id: "articles", name: "Market Articles", count: 45 },
-  { id: "analysis", name: "Featured Analysis", count: 12 },
-  { id: "strategies", name: "Investment Strategies", count: 8 },
-  { id: "reports", name: "Research Reports", count: 23 },
-  { id: "insights", name: "Expert Insights", count: 18 }
+  { name: 'Market Trends', slug: 'market-trends', icon: TrendingUp, color: 'bg-blue-100 text-blue-800' },
+  { name: 'Key Deals', slug: 'key-deals', icon: Target, color: 'bg-green-100 text-green-800' },
+  { name: 'Investment Strategy', slug: 'investment-strategy', icon: FileText, color: 'bg-purple-100 text-purple-800' },
+  { name: 'News', slug: 'news', icon: Newspaper, color: 'bg-orange-100 text-orange-800' },
 ];
 
-const sampleContent = [
-  {
-    id: 1,
-    title: "Q1 2025 Market Outlook: Emerging Trends",
-    type: "article",
-    status: "published",
-    author: "Sarah Johnson",
-    date: "2025-01-10",
-    views: 1247,
-    category: "Market Trends"
-  },
-  {
-    id: 2,
-    title: "AI-Driven Investment Analysis Framework",
-    type: "analysis",
-    status: "draft",
-    author: "Mike Chen",
-    date: "2025-01-08",
-    views: 0,
-    category: "Technology"
-  },
-  {
-    id: 3,
-    title: "Commercial Real Estate Recovery Strategies",
-    type: "strategy",
-    status: "published",
-    author: "Emily Rodriguez",
-    date: "2025-01-05",
-    views: 892,
-    category: "Commercial"
-  }
-];
+interface Article {
+  id: string;
+  title: string;
+  subtitle?: string;
+  content?: string;
+  category: string;
+  author_name?: string;
+  published: boolean;
+  featured: boolean;
+  featured_order?: number;
+  view_count: number;
+  excerpt?: string;
+  created_at: string;
+  updated_at: string;
+  slug?: string;
+}
+
+interface CategoryCount {
+  category: string;
+  count: number;
+}
 
 export const ContentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedType, setSelectedType] = useState("all");
-  const location = useLocation();
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [categoryCounts, setCategoryCounts] = useState<CategoryCount[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const filteredContent = sampleContent.filter(content => {
-    const matchesSearch = content.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === "all" || content.type === selectedType;
-    return matchesSearch && matchesType;
+  // Fetch articles from Supabase
+  const fetchArticles = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setArticles(data || []);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch articles",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Fetch category counts
+  const fetchCategoryCounts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('articles')
+        .select('category')
+        .eq('published', true);
+
+      if (error) throw error;
+
+      const counts = contentTypes.map(type => ({
+        category: type.name,
+        count: data?.filter(article => article.category === type.name).length || 0
+      }));
+
+      setCategoryCounts(counts);
+    } catch (error) {
+      console.error('Error fetching category counts:', error);
+    }
+  };
+
+  // Toggle featured status
+  const toggleFeatured = async (articleId: string, currentFeatured: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('articles')
+        .update({ featured: !currentFeatured })
+        .eq('id', articleId);
+
+      if (error) throw error;
+
+      await fetchArticles();
+      toast({
+        title: "Success",
+        description: `Article ${!currentFeatured ? 'added to' : 'removed from'} featured articles`,
+      });
+    } catch (error: any) {
+      console.error('Error updating featured status:', error);
+      toast({
+        title: "Error",
+        description: error.message?.includes('more than 9') 
+          ? "Cannot have more than 9 featured articles"
+          : "Failed to update featured status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Delete article
+  const deleteArticle = async (articleId: string) => {
+    if (!confirm('Are you sure you want to delete this article?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('articles')
+        .delete()
+        .eq('id', articleId);
+
+      if (error) throw error;
+
+      await fetchArticles();
+      await fetchCategoryCounts();
+      toast({
+        title: "Success",
+        description: "Article deleted successfully",
+      });
+    } catch (error) {
+      console.error('Error deleting article:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete article",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Toggle published status
+  const togglePublished = async (articleId: string, currentPublished: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('articles')
+        .update({ published: !currentPublished })
+        .eq('id', articleId);
+
+      if (error) throw error;
+
+      await fetchArticles();
+      await fetchCategoryCounts();
+      toast({
+        title: "Success",
+        description: `Article ${!currentPublished ? 'published' : 'unpublished'} successfully`,
+      });
+    } catch (error) {
+      console.error('Error updating published status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update published status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchArticles(), fetchCategoryCounts()]);
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
+  // Filter articles
+  const filteredArticles = articles.filter(article => {
+    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         article.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         article.author_name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
+    return matchesSearch && matchesCategory;
   });
+
+  // Get category count for display
+  const getCategoryCount = (categoryName: string) => {
+    return categoryCounts.find(c => c.category === categoryName)?.count || 0;
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <Clock className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -74,27 +223,45 @@ export const ContentManagement = () => {
         <div>
           <h1 className="text-3xl font-bold">Content Management</h1>
           <p className="text-muted-foreground">
-            Manage articles, analysis, strategies, and insights
+            Manage your real estate articles and featured content
           </p>
         </div>
         <Button className="gap-2">
           <Plus className="h-4 w-4" />
-          Create Content
+          Create Article
         </Button>
       </div>
 
       {/* Content Type Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {contentTypes.map((type) => (
-          <Card key={type.id} className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardContent className="p-4 text-center">
-              <FileText className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <h3 className="font-semibold text-sm">{type.name}</h3>
-              <p className="text-2xl font-bold text-primary mt-1">{type.count}</p>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {contentTypes.map((type) => {
+          const Icon = type.icon;
+          return (
+            <Card key={type.slug} className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardContent className="p-4 text-center">
+                <Icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <h3 className="font-semibold text-sm">{type.name}</h3>
+                <p className="text-2xl font-bold text-primary mt-1">
+                  {getCategoryCount(type.name)}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
+
+      {/* Featured Articles Summary */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Star className="h-5 w-5 text-yellow-500" />
+            Featured Articles
+          </CardTitle>
+          <CardDescription>
+            {articles.filter(a => a.featured).length} of 9 slots used for homepage featured articles
+          </CardDescription>
+        </CardHeader>
+      </Card>
 
       {/* Search and Filters */}
       <Card>
@@ -104,77 +271,117 @@ export const ContentManagement = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search content..."
+                  placeholder="Search articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
             </div>
-            <Tabs value={selectedType} onValueChange={setSelectedType}>
+            <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="article">Articles</TabsTrigger>
-                <TabsTrigger value="analysis">Analysis</TabsTrigger>
-                <TabsTrigger value="strategy">Strategies</TabsTrigger>
+                {contentTypes.map((type) => (
+                  <TabsTrigger key={type.slug} value={type.name}>
+                    {type.name}
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </Tabs>
           </div>
         </CardHeader>
       </Card>
 
-      {/* Content List */}
+      {/* Articles List */}
       <Card>
         <CardHeader>
-          <CardTitle>Content Library</CardTitle>
+          <CardTitle>Articles Library</CardTitle>
           <CardDescription>
-            All your published and draft content
+            {filteredArticles.length} articles found
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredContent.map((content) => (
-              <div key={content.id} className="flex items-center justify-between p-4 border rounded-lg hover:shadow-sm transition-shadow">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold">{content.title}</h3>
-                    <Badge 
-                      variant={content.status === "published" ? "default" : "secondary"}
-                    >
-                      {content.status}
-                    </Badge>
-                    <Badge variant="outline">
-                      {content.category}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
-                      {content.author}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {new Date(content.date).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      {content.views} views
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="text-destructive">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
+            {filteredArticles.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No articles found matching your criteria</p>
               </div>
-            ))}
+            ) : (
+              filteredArticles.map((article) => (
+                <div key={article.id} className="flex items-center justify-between p-4 border rounded-lg hover:shadow-sm transition-shadow">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-semibold">{article.title}</h3>
+                      <Badge variant={article.published ? "default" : "secondary"}>
+                        {article.published ? "Published" : "Draft"}
+                      </Badge>
+                      {article.featured && (
+                        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+                          <Star className="h-3 w-3 mr-1" />
+                          Featured
+                        </Badge>
+                      )}
+                      <Badge variant="outline">
+                        {article.category}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                      <div className="flex items-center gap-1">
+                        <User className="h-3 w-3" />
+                        {article.author_name || 'Unknown Author'}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(article.created_at).toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Eye className="h-3 w-3" />
+                        {article.view_count} views
+                      </div>
+                    </div>
+                    {article.excerpt && (
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {article.excerpt}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">Featured</span>
+                      <Switch
+                        checked={article.featured}
+                        onCheckedChange={() => toggleFeatured(article.id, article.featured)}
+                        disabled={!article.published}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">Published</span>
+                      <Switch
+                        checked={article.published}
+                        onCheckedChange={() => togglePublished(article.id, article.published)}
+                      />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => deleteArticle(article.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </CardContent>
       </Card>
