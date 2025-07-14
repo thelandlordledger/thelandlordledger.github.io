@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, Bell, User, BarChart3 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { MarketTicker } from "./MarketTicker";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,11 +17,9 @@ export const Header = () => {
   ];
 
   return (
-    <>
-      <MarketTicker />
-      <header className="fixed top-12 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
@@ -127,8 +124,7 @@ export const Header = () => {
           </div>
         )}
         
-        </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 };
