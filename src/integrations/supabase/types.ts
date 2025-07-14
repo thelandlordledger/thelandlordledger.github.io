@@ -14,13 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      articles: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          metric_value: string | null
+          published: boolean | null
+          read_time: number | null
+          slug: string | null
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          category: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metric_value?: string | null
+          published?: boolean | null
+          read_time?: number | null
+          slug?: string | null
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          metric_value?: string | null
+          published?: boolean | null
+          read_time?: number | null
+          slug?: string | null
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_slug: {
+        Args: { title: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
