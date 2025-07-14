@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Clock, TrendingUp, MapPin, Building2, Briefcase } from "lucide-react";
+import { ArrowRight, Clock, TrendingUp, MapPin, Building2, Briefcase, BarChart3, Home, PieChart, Globe, Target, DollarSign } from "lucide-react";
 
 export const FeaturedAnalysis = () => {
   const featuredContent = [
@@ -33,6 +33,66 @@ export const FeaturedAnalysis = () => {
       readTime: "10 min",
       trend: "+18.7%",
       icon: Briefcase
+    },
+    {
+      category: "Market Analysis",
+      title: "Residential Price Dynamics",
+      subtitle: "Housing affordability reaches critical inflection point",
+      description: "Comprehensive analysis of housing price trends across major metropolitan areas, affordability metrics, and policy implications.",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+      readTime: "7 min",
+      trend: "+15.2%",
+      icon: Home
+    },
+    {
+      category: "Portfolio Management",
+      title: "REIT Performance Outlook",
+      subtitle: "Sector rotation drives new opportunities",
+      description: "In-depth review of REIT performance by sector, dividend sustainability analysis, and strategic positioning for institutional investors.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      readTime: "9 min",
+      trend: "+12.8%",
+      icon: PieChart
+    },
+    {
+      category: "Global Markets",
+      title: "Cross-Border Capital Flows",
+      subtitle: "International investment patterns reshape markets",
+      description: "Analysis of foreign direct investment in real estate, currency impacts, and emerging market opportunities for global portfolios.",
+      image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+      readTime: "11 min",
+      trend: "+28.1%",
+      icon: Globe
+    },
+    {
+      category: "Data Analytics",
+      title: "PropTech Market Intelligence",
+      subtitle: "Technology disruption accelerates market evolution",
+      description: "Comprehensive analysis of property technology adoption, market penetration rates, and impact on traditional real estate operations.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      readTime: "6 min",
+      trend: "+45.3%",
+      icon: BarChart3
+    },
+    {
+      category: "Alternative Assets",
+      title: "Opportunity Zone Investments",
+      subtitle: "Tax incentives drive capital deployment",
+      description: "Strategic analysis of Opportunity Zone investments, project pipeline, and long-term return expectations for qualified investors.",
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80",
+      readTime: "13 min",
+      trend: "+31.7%",
+      icon: Target
+    },
+    {
+      category: "Capital Markets",
+      title: "Interest Rate Impact Analysis",
+      subtitle: "Fed policy shifts reshape financing landscape",
+      description: "Detailed examination of interest rate impacts on real estate valuations, financing costs, and investment strategy adjustments.",
+      image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80",
+      readTime: "8 min",
+      trend: "+5.9%",
+      icon: DollarSign
     }
   ];
 
