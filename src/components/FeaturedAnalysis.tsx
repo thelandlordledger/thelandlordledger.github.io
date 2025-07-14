@@ -60,77 +60,68 @@ export const FeaturedAnalysis = () => {
         </div>
         
         {/* Featured Content Grid */}
-        <div className="space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredContent.map((content, index) => {
             const IconComponent = content.icon;
-            const isReversed = index % 2 === 1;
             
             return (
               <Card 
                 key={index}
-                className="overflow-hidden border-0 bg-background/80 backdrop-blur-sm hover-lift hover:shadow-elegant transition-all duration-500"
+                className="group overflow-hidden border-0 bg-gradient-to-br from-background via-background/90 to-primary/5 backdrop-blur-sm hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02]"
               >
-                <div className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} min-h-[400px]`}>
+                {/* Image Section */}
+                <div className="relative overflow-hidden h-64">
+                  <img 
+                    src={content.image} 
+                    alt={content.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
                   
-                  {/* Image Section */}
-                  <div className="lg:w-1/2 relative overflow-hidden">
-                    <img 
-                      src={content.image} 
-                      alt={content.title}
-                      className="w-full h-64 lg:h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 to-transparent"></div>
-                    
-                    {/* Floating Metric */}
-                    <div className="absolute top-6 right-6 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <IconComponent className="w-4 h-4 text-primary" />
-                        <span className="font-accent font-semibold text-sm text-foreground">
-                          {content.trend}
-                        </span>
-                      </div>
+                  {/* Floating Category */}
+                  <div className="absolute top-4 left-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-accent font-medium rounded-full">
+                    {content.category}
+                  </div>
+                  
+                  {/* Floating Metric */}
+                  <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
+                    <div className="flex items-center gap-2">
+                      <IconComponent className="w-4 h-4 text-primary" />
+                      <span className="font-accent font-bold text-sm text-foreground">
+                        {content.trend}
+                      </span>
                     </div>
                   </div>
                   
-                  {/* Content Section */}
-                  <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-                    <div className="space-y-6">
-                      
-                      {/* Category & Reading Time */}
-                      <div className="flex items-center justify-between">
-                        <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-accent font-medium rounded-full">
-                          {content.category}
-                        </span>
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Clock className="w-3 h-3" />
-                          {content.readTime}
-                        </div>
-                      </div>
-                      
-                      {/* Headlines */}
-                      <div>
-                        <h3 className="font-primary text-3xl lg:text-4xl font-semibold text-foreground mb-3 leading-tight">
-                          {content.title}
-                        </h3>
-                        <h4 className="font-secondary text-lg text-primary font-medium mb-4">
-                          {content.subtitle}
-                        </h4>
-                      </div>
-                      
-                      {/* Description */}
-                      <p className="font-secondary text-muted-foreground leading-relaxed text-base">
-                        {content.description}
-                      </p>
-                      
-                      {/* CTA */}
-                      <Button variant="outline" className="group w-fit">
-                        Read Full Analysis
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                      
-                    </div>
+                  {/* Reading Time */}
+                  <div className="absolute bottom-4 left-4 flex items-center gap-1 text-xs text-background bg-foreground/80 px-2 py-1 rounded-full backdrop-blur-sm">
+                    <Clock className="w-3 h-3" />
+                    {content.readTime}
+                  </div>
+                </div>
+                
+                {/* Content Section */}
+                <div className="p-6 space-y-4">
+                  {/* Headlines */}
+                  <div>
+                    <h3 className="font-primary text-xl font-bold text-foreground mb-2 leading-tight group-hover:text-primary transition-colors duration-300">
+                      {content.title}
+                    </h3>
+                    <h4 className="font-secondary text-sm text-primary font-medium mb-3 line-clamp-2">
+                      {content.subtitle}
+                    </h4>
                   </div>
                   
+                  {/* Description */}
+                  <p className="font-secondary text-muted-foreground leading-relaxed text-sm line-clamp-3">
+                    {content.description}
+                  </p>
+                  
+                  {/* CTA */}
+                  <Button variant="ghost" size="sm" className="group/btn w-full justify-between hover:bg-primary/10 hover:text-primary transition-all">
+                    <span>Read Full Analysis</span>
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
                 </div>
               </Card>
             );
