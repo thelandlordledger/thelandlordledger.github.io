@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, Search, Bell, User, BarChart3 } from "lucide-react";
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MarketTicker } from "./MarketTicker";
 
