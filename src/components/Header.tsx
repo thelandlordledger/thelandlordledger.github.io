@@ -11,7 +11,7 @@ export const Header = () => {
   const navigation = [
     { name: "Market Trends", href: "/market-trends" },
     { name: "Key Deals", href: "/key-deals" },
-    { name: "Strategies", href: "/strategies" },
+    
     { name: "Events", href: "/events" }
   ];
 

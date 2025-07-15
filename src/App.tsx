@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MarketTrends from "./pages/MarketTrends";
 import KeyDeals from "./pages/KeyDeals";
-import Strategies from "./pages/Strategies";
+
 
 import AIChat from "./pages/AIChat";
 import Events from "./pages/Events";
@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/market-trends" element={<MarketTrends />} />
           <Route path="/key-deals" element={<KeyDeals />} />
-          <Route path="/strategies" element={<Strategies />} />
+          
           
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/events" element={<Events />} />
