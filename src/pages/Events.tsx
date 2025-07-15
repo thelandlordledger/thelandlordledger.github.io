@@ -25,7 +25,7 @@ interface Event {
   published: boolean;
 }
 
-const eventTypes = ["All", "Online", "In Person"];
+const eventTypes = ["All", "Online", "In Person", "Free"];
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -57,6 +57,8 @@ export default function Events() {
 
   const filteredEvents = selectedCategory === "All" 
     ? events 
+    : selectedCategory === "Free"
+    ? events.filter(event => !event.price || event.price === 0)
     : events.filter(event => event.event_type === selectedCategory);
 
   const formatEventDate = (startDate: string, endDate?: string) => {
