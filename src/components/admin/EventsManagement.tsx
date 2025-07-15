@@ -45,11 +45,8 @@ interface Event {
 }
 
 const eventTypes = [
-  'Conference',
-  'Trade Show',
-  'Summit',
-  'Convention',
-  'Regional'
+  'Online',
+  'In Person'
 ];
 
 export const EventsManagement = () => {

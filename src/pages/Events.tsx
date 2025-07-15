@@ -25,7 +25,7 @@ interface Event {
   published: boolean;
 }
 
-const eventTypes = ["All", "Conference", "Trade Show", "Summit", "Convention", "Regional"];
+const eventTypes = ["All", "Online", "In Person"];
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("All");
