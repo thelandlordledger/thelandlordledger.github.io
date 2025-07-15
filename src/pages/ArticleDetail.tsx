@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import secondaryMarketsHero from '@/assets/secondary-markets-hero.jpg';
 
 interface Article {
   id: string;
@@ -154,31 +157,31 @@ export default function ArticleDetail() {
           </div>
 
           {/* Article Header */}
-          <div className="space-y-6 mb-12">
+          <div className="space-y-8 mb-16">
             {/* Category Badge */}
             <div>
-              <Badge variant="outline" className="mb-4">
+              <Badge variant="outline" className="mb-6 px-4 py-2 text-sm font-medium">
                 {article.category}
               </Badge>
             </div>
 
             {/* Title and Subtitle */}
             <div>
-              <h1 className="font-primary text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+              <h1 className="font-primary text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
                 {article.title}
               </h1>
               {article.subtitle && (
-                <p className="font-secondary text-xl text-primary font-medium">
+                <p className="font-secondary text-xl md:text-2xl text-primary font-medium leading-relaxed">
                   {article.subtitle}
                 </p>
               )}
             </div>
 
             {/* Article Meta */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-8 text-sm text-muted-foreground py-6 border-t border-b">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>{article.author_name || 'Expert Analysis'}</span>
+                <span className="font-medium">{article.author_name || 'Expert Analysis'}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
@@ -211,9 +214,9 @@ export default function ArticleDetail() {
           {article.image_url && (
             <div className="mb-12">
               <img 
-                src={article.image_url} 
+                src={article.image_url.includes('secondary-markets-hero') ? secondaryMarketsHero : article.image_url} 
                 alt={article.title}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                className="w-full h-96 md:h-[500px] object-cover rounded-xl shadow-2xl"
               />
             </div>
           )}
@@ -221,10 +224,12 @@ export default function ArticleDetail() {
           <Separator className="my-12" />
 
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none">
+          <div className="article-content">
             {article.content ? (
-              <div className="whitespace-pre-wrap leading-relaxed text-foreground">
-                {article.content}
+              <div className="prose prose-lg max-w-none prose-headings:font-primary prose-headings:text-foreground prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-li:text-foreground prose-h1:text-3xl prose-h1:font-bold prose-h1:mb-6 prose-h1:mt-8 prose-h2:text-2xl prose-h2:font-semibold prose-h2:mb-4 prose-h2:mt-6 prose-h3:text-xl prose-h3:font-medium prose-h3:mb-3 prose-h3:mt-4 prose-p:mb-4 prose-ul:mb-4 prose-ol:mb-4 prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:my-6 prose-blockquote:text-muted-foreground prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-a:text-primary prose-a:hover:text-primary/80 prose-a:no-underline prose-a:hover:underline">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {article.content}
+                </ReactMarkdown>
               </div>
             ) : (
               <div className="text-center py-16 text-muted-foreground">
