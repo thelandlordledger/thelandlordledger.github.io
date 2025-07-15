@@ -6,6 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -60,6 +64,18 @@ export const ContentManagement = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [categoryCounts, setCategoryCounts] = useState<CategoryCount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [newArticle, setNewArticle] = useState({
+    title: "",
+    subtitle: "",
+    content: "",
+    category: "",
+    author_name: "",
+    excerpt: "",
+    published: false,
+    featured: false
+  });
   const { toast } = useToast();
 
   // Fetch articles from Supabase
@@ -184,6 +200,98 @@ export const ContentManagement = () => {
     }
   };
 
+  // Reset form function
+  const resetForm = () => {
+    setNewArticle({
+      title: "",
+      subtitle: "",
+      content: "",
+      category: "",
+      author_name: "",
+      excerpt: "",
+      published: false,
+      featured: false
+    });
+    setEditingArticle(null);
+  };
+
+  // Save article function
+  const handleSaveArticle = async () => {
+    if (!newArticle.title || !newArticle.category) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const articleData = {
+        ...newArticle,
+        content: newArticle.content || null,
+        subtitle: newArticle.subtitle || null,
+        author_name: newArticle.author_name || null,
+        excerpt: newArticle.excerpt || null
+      };
+
+      if (editingArticle) {
+        const { error } = await supabase
+          .from('articles')
+          .update(articleData)
+          .eq('id', editingArticle.id);
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success",
+          description: "Article updated successfully"
+        });
+      } else {
+        const { error } = await supabase
+          .from('articles')
+          .insert([articleData]);
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success",
+          description: "Article created successfully"
+        });
+      }
+
+      await fetchArticles();
+      await fetchCategoryCounts();
+      setIsDialogOpen(false);
+      resetForm();
+    } catch (error: any) {
+      console.error('Error saving article:', error);
+      toast({
+        title: "Error",
+        description: error.message?.includes('more than 9') 
+          ? "Cannot have more than 9 featured articles"
+          : "Failed to save article",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Handle edit article
+  const handleEditArticle = (article: Article) => {
+    setNewArticle({
+      title: article.title,
+      subtitle: article.subtitle || "",
+      content: article.content || "",
+      category: article.category,
+      author_name: article.author_name || "",
+      excerpt: article.excerpt || "",
+      published: article.published,
+      featured: article.featured
+    });
+    setEditingArticle(article);
+    setIsDialogOpen(true);
+  };
+
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -226,10 +334,121 @@ export const ContentManagement = () => {
             Manage your real estate articles and featured content
           </p>
         </div>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Create Article
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2" onClick={resetForm}>
+              <Plus className="h-4 w-4" />
+              Create Article
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{editingArticle ? 'Edit Article' : 'Create New Article'}</DialogTitle>
+              <DialogDescription>
+                {editingArticle ? 'Update the article details' : 'Create a new article for your real estate platform'}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label htmlFor="title">Title *</Label>
+                <Input
+                  id="title"
+                  value={newArticle.title}
+                  onChange={(e) => setNewArticle({...newArticle, title: e.target.value})}
+                  placeholder="Enter article title"
+                />
+              </div>
+              
+              <div className="col-span-2">
+                <Label htmlFor="subtitle">Subtitle</Label>
+                <Input
+                  id="subtitle"
+                  value={newArticle.subtitle}
+                  onChange={(e) => setNewArticle({...newArticle, subtitle: e.target.value})}
+                  placeholder="Enter article subtitle"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category *</Label>
+                <Select 
+                  value={newArticle.category} 
+                  onValueChange={(value) => setNewArticle({...newArticle, category: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {contentTypes.map((type) => (
+                      <SelectItem key={type.name} value={type.name}>
+                        {type.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="author">Author Name</Label>
+                <Input
+                  id="author"
+                  value={newArticle.author_name}
+                  onChange={(e) => setNewArticle({...newArticle, author_name: e.target.value})}
+                  placeholder="Enter author name"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <Label htmlFor="excerpt">Excerpt</Label>
+                <Textarea
+                  id="excerpt"
+                  value={newArticle.excerpt}
+                  onChange={(e) => setNewArticle({...newArticle, excerpt: e.target.value})}
+                  placeholder="Enter a brief excerpt for the article"
+                  rows={3}
+                />
+              </div>
+
+              <div className="col-span-2">
+                <Label htmlFor="content">Content</Label>
+                <Textarea
+                  id="content"
+                  value={newArticle.content}
+                  onChange={(e) => setNewArticle({...newArticle, content: e.target.value})}
+                  placeholder="Enter the full article content"
+                  rows={8}
+                />
+              </div>
+
+              <div className="col-span-2 flex gap-6">
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={newArticle.published}
+                    onCheckedChange={(checked) => setNewArticle({...newArticle, published: checked})}
+                  />
+                  <Label>Published</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={newArticle.featured}
+                    onCheckedChange={(checked) => setNewArticle({...newArticle, featured: checked})}
+                    disabled={!newArticle.published}
+                  />
+                  <Label>Featured</Label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2 mt-4">
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSaveArticle}>
+                {editingArticle ? 'Update Article' : 'Create Article'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Content Type Overview */}
@@ -363,7 +582,7 @@ export const ContentManagement = () => {
                       />
                     </div>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => handleEditArticle(article)}>
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm">
