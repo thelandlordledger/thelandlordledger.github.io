@@ -226,8 +226,72 @@ export default function ArticleDetail() {
           {/* Article Content */}
           <div className="article-content">
             {article.content ? (
-              <div className="prose prose-lg max-w-none prose-headings:font-primary prose-headings:text-foreground prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-foreground prose-li:text-foreground prose-h1:text-3xl prose-h1:font-bold prose-h1:mb-6 prose-h1:mt-8 prose-h2:text-2xl prose-h2:font-semibold prose-h2:mb-4 prose-h2:mt-6 prose-h3:text-xl prose-h3:font-medium prose-h3:mb-3 prose-h3:mt-4 prose-p:mb-4 prose-ul:mb-4 prose-ol:mb-4 prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:my-6 prose-blockquote:text-muted-foreground prose-code:bg-muted prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-a:text-primary prose-a:hover:text-primary/80 prose-a:no-underline prose-a:hover:underline">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <div className="prose prose-lg max-w-none">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ children }) => (
+                      <h1 className="font-primary text-3xl font-bold text-foreground mb-6 mt-8">
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 className="font-primary text-2xl font-semibold text-foreground mb-4 mt-6">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="font-primary text-xl font-medium text-foreground mb-3 mt-4">
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-foreground leading-relaxed mb-4">
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="text-foreground mb-4 list-disc list-inside">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="text-foreground mb-4 list-decimal list-inside">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-foreground mb-1">
+                        {children}
+                      </li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="text-foreground font-semibold">
+                        {children}
+                      </strong>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-l-primary pl-6 my-6 text-muted-foreground">
+                        {children}
+                      </blockquote>
+                    ),
+                    code: ({ children }) => (
+                      <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
+                        {children}
+                      </code>
+                    ),
+                    a: ({ children, href }) => (
+                      <a 
+                        href={href}
+                        className="text-primary hover:text-primary/80 no-underline hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {children}
+                      </a>
+                    ),
+                  }}
+                >
                   {article.content}
                 </ReactMarkdown>
               </div>
