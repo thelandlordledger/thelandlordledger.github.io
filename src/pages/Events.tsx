@@ -210,12 +210,12 @@ export default function Events() {
                       </div>
                     )}
 
-                    {event.price && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Clock className="w-4 h-4 text-primary" />
-                        <span>${event.price}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 text-sm">
+                      <Clock className="w-4 h-4 text-primary" />
+                      <span>
+                        {!event.price || event.price === 0 ? 'Free' : `$${event.price}`}
+                      </span>
+                    </div>
                   </div>
                   
                   <div className="flex gap-2">
