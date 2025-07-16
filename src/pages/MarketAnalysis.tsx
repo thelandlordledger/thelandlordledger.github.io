@@ -42,6 +42,7 @@ const categoryTabs = [
   { value: "Market Trends", label: "Market Trends", icon: TrendingUp },
   { value: "Key Deals", label: "Key Deals", icon: Target },
   { value: "Investment Strategy", label: "Investment Strategy", icon: FileText },
+  { value: "Profile", label: "Profile", icon: User },
   { value: "News", label: "News", icon: Newspaper },
 ];
 
@@ -58,6 +59,7 @@ export default function MarketAnalysis() {
       case 'Market Trends': return TrendingUp;
       case 'Key Deals': return Target;
       case 'Investment Strategy': return FileText;
+      case 'Profile': return User;
       case 'News': return Newspaper;
       default: return FileText;
     }
@@ -134,7 +136,7 @@ export default function MarketAnalysis() {
           </div>
 
           <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
               {categoryTabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
