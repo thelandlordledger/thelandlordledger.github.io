@@ -31,6 +31,7 @@ interface Article {
   excerpt?: string;
   created_at: string;
   updated_at: string;
+  published_date?: string;
   image_url?: string;
   read_time?: number;
   metric_value?: string;
@@ -167,11 +168,11 @@ export default function ArticleDetail() {
 
             {/* Title and Subtitle */}
             <div>
-              <h1 className="font-primary text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
+              <h1 className="font-primary text-5xl md:text-7xl font-bold text-foreground mb-8 leading-[0.95] tracking-tight">
                 {article.title}
               </h1>
               {article.subtitle && (
-                <p className="font-secondary text-xl md:text-2xl text-primary font-medium leading-relaxed">
+                <p className="font-secondary text-2xl md:text-3xl text-primary font-medium leading-relaxed tracking-wide">
                   {article.subtitle}
                 </p>
               )}
@@ -185,7 +186,7 @@ export default function ArticleDetail() {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>{new Date(article.created_at).toLocaleDateString('en-US', { 
+                <span>{new Date(article.published_date || article.created_at).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -231,22 +232,27 @@ export default function ArticleDetail() {
                   remarkPlugins={[remarkGfm]}
                   components={{
                     h1: ({ children }) => (
-                      <h1 className="font-primary text-3xl font-bold text-foreground mb-6 mt-8">
+                      <h1 className="font-primary text-4xl font-bold text-foreground mb-8 mt-12 leading-tight tracking-tight">
                         {children}
                       </h1>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="font-primary text-2xl font-semibold text-foreground mb-4 mt-6">
+                      <h2 className="font-primary text-3xl font-semibold text-foreground mb-6 mt-10 leading-tight tracking-tight">
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="font-primary text-xl font-medium text-foreground mb-3 mt-4">
+                      <h3 className="font-primary text-2xl font-medium text-foreground mb-4 mt-8 leading-tight">
                         {children}
                       </h3>
                     ),
+                    h4: ({ children }) => (
+                      <h4 className="font-primary text-xl font-medium text-foreground mb-3 mt-6 leading-tight">
+                        {children}
+                      </h4>
+                    ),
                     p: ({ children }) => (
-                      <p className="text-foreground leading-relaxed mb-4">
+                      <p className="font-secondary text-lg text-foreground leading-relaxed mb-6 tracking-wide">
                         {children}
                       </p>
                     ),

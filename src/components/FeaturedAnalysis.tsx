@@ -115,66 +115,37 @@ export const FeaturedAnalysis = () => {
               return (
                 <Card 
                   key={article.id}
-                  className="group overflow-hidden border-0 bg-gradient-to-br from-background via-background/90 to-primary/5 backdrop-blur-sm hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02]"
-                >
-                  {/* Image Section */}
-                  <div className="relative overflow-hidden h-64">
-                    <img 
-                      src={article.image_url || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80"} 
-                      alt={article.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
-                    
-                    {/* Floating Category */}
-                    <div className="absolute top-4 left-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-accent font-medium rounded-full">
+                  className="group overflow-hidden border bg-card hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02]"
+                >                  
+                  {/* Content Section */}
+                  <div className="p-8 space-y-6">
+                    {/* Category */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-accent font-medium rounded-full">
                       {article.category}
                     </div>
                     
-                    {/* Floating Metric */}
-                    <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
-                      <div className="flex items-center gap-2">
-                        <IconComponent className="w-4 h-4 text-primary" />
-                        <span className="font-accent font-bold text-sm text-foreground">
-                          {article.metric_value || `${article.view_count} views`}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Reading Time */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1 text-xs text-background bg-foreground/80 px-2 py-1 rounded-full backdrop-blur-sm">
-                      <Clock className="w-3 h-3" />
-                      {article.read_time ? `${article.read_time} min` : '5 min'}
-                    </div>
-                  </div>
-                  
-                  {/* Content Section */}
-                  <div className="p-6 space-y-4">
                     {/* Headlines */}
                     <div>
-                      <h3 className="font-primary text-xl font-bold text-foreground mb-2 leading-tight group-hover:text-primary transition-colors duration-300">
+                      <h3 className="font-primary text-2xl font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
                         {article.title}
                       </h3>
-                      <h4 className="font-secondary text-sm text-primary font-medium mb-3 line-clamp-2">
-                        {article.subtitle || 'Expert analysis and market insights'}
-                      </h4>
+                      {article.subtitle && (
+                        <p className="font-secondary text-lg text-muted-foreground leading-relaxed">
+                          {article.subtitle}
+                        </p>
+                      )}
                     </div>
-                    
-                    {/* Description */}
-                    <p className="font-secondary text-muted-foreground leading-relaxed text-sm line-clamp-3">
-                      {article.excerpt || article.content?.substring(0, 150) + '...' || 'In-depth analysis providing actionable insights for sophisticated investors.'}
-                    </p>
                     
                     {/* CTA */}
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="group/btn w-full justify-between hover:bg-primary/10 hover:text-primary transition-all"
+                      className="group/btn justify-start p-0 h-auto hover:bg-transparent hover:text-primary transition-all"
                       asChild
                     >
                       <Link to={`/article/${article.slug || article.id}`}>
-                        <span>Read Full Analysis</span>
-                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                        <span className="font-medium">Read Article</span>
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                       </Link>
                     </Button>
                   </div>

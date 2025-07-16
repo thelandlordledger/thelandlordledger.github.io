@@ -28,6 +28,7 @@ export type Database = {
           image_url: string | null
           metric_value: string | null
           published: boolean | null
+          published_date: string | null
           read_time: number | null
           slug: string | null
           subtitle: string | null
@@ -48,6 +49,7 @@ export type Database = {
           image_url?: string | null
           metric_value?: string | null
           published?: boolean | null
+          published_date?: string | null
           read_time?: number | null
           slug?: string | null
           subtitle?: string | null
@@ -68,6 +70,7 @@ export type Database = {
           image_url?: string | null
           metric_value?: string | null
           published?: boolean | null
+          published_date?: string | null
           read_time?: number | null
           slug?: string | null
           subtitle?: string | null
