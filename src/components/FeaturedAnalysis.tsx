@@ -116,14 +116,24 @@ export const FeaturedAnalysis = () => {
                 <Card 
                   key={article.id}
                   className="group overflow-hidden border bg-card hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02]"
-                >                  
-                  {/* Content Section */}
-                  <div className="p-8 space-y-6">
-                    {/* Category */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-xs font-accent font-medium rounded-full">
+                >
+                  {/* Image Section */}
+                  <div className="relative overflow-hidden h-48">
+                    <img 
+                      src={article.image_url || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80"} 
+                      alt={article.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"></div>
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-accent font-medium rounded-full">
                       {article.category}
                     </div>
-                    
+                  </div>
+                  
+                  {/* Content Section */}
+                  <div className="p-8 space-y-6">                    
                     {/* Headlines */}
                     <div>
                       <h3 className="font-primary text-2xl font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
