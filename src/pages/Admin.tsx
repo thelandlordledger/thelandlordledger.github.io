@@ -10,6 +10,7 @@ import { AIChatManagement } from "@/components/admin/AIChatManagement";
 import { UsersManagement } from "@/components/admin/UsersManagement";
 import { AnalyticsManagement } from "@/components/admin/AnalyticsManagement";
 import { AdminSettings } from "@/components/admin/AdminSettings";
+import { CarouselManagement } from "@/components/admin/CarouselManagement";
 import { AdminLogin } from "@/components/admin/AdminLogin";
 
 const Admin = () => {
@@ -42,6 +43,7 @@ const Admin = () => {
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
         <Route path="/content/*" element={<ContentManagement />} />
+        <Route path="/carousel" element={<CarouselManagement />} />
         <Route path="/events" element={<EventsManagement />} />
         <Route path="/market-data" element={<MarketDataManagement />} />
         <Route path="/team" element={<TeamManagement />} />

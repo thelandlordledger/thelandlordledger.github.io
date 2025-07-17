@@ -15,7 +15,8 @@ import {
   Menu,
   LogOut,
   Shield,
-  Home
+  Home,
+  ImageIcon
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -25,6 +26,7 @@ interface AdminLayoutProps {
 const adminNavItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Content", href: "/admin/content", icon: FileText },
+  { name: "Carousel", href: "/admin/carousel", icon: ImageIcon },
   { name: "Events", href: "/admin/events", icon: Calendar },
   { name: "Market Data", href: "/admin/market-data", icon: TrendingUp },
   { name: "Team", href: "/admin/team", icon: Users },
