@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FallbackImage } from "@/components/FallbackImage";
 import { 
   Search, 
   Clock, 
@@ -207,8 +208,8 @@ export default function MarketAnalysis() {
                 >
                   {/* Image Section */}
                   <div className="relative overflow-hidden h-48">
-                    <img 
-                      src={article.image_url || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80"} 
+                    <FallbackImage
+                      src={article.image_url}
                       alt={article.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />

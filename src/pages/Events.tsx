@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { FallbackImage } from "@/components/FallbackImage";
 
 interface Event {
   id: string;
@@ -159,8 +160,8 @@ export default function Events() {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="relative overflow-hidden">
-                  <img 
-                    src={event.image_url || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop"} 
+                  <FallbackImage
+                    src={event.image_url}
                     alt={event.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                   />
