@@ -3,44 +3,52 @@ import { TrendingUp, TrendingDown, Home, Clock, DollarSign, Building, Users } fr
 export const MarketTicker = () => {
   const marketData = [
     {
-      label: "NATIONAL PRICE INDEX",
-      value: "$425,900",
-      change: "+2.4%",
-      trend: "up",
-      icon: Home,
-      description: "Median home price nationwide"
-    },
-    {
-      label: "MARKET VELOCITY",
-      value: "28 days",
-      change: "-5.2%",
-      trend: "down",
-      icon: Clock,
-      description: "Average days on market"
-    },
-    {
-      label: "INVESTMENT VOLUME",
-      value: "$847.2B",
-      change: "+12.8%",
+      label: "GLOBAL CRE DEALS",
+      value: "$185B",
+      change: "+34%",
       trend: "up",
       icon: DollarSign,
-      description: "Total commercial transactions"
+      description: "Q1 2025 commercial volumes"
     },
     {
-      label: "NEW CONSTRUCTIONS",
-      value: "1.42M",
-      change: "+3.1%",
+      label: "US MORTGAGE RATES",
+      value: "6.7%",
+      change: "+20yr high",
+      trend: "up",
+      icon: Home,
+      description: "30-year fixed rate mortgage"
+    },
+    {
+      label: "CAPITAL FLOWS",
+      value: "+57%",
+      change: "YoY",
+      trend: "up",
+      icon: TrendingUp,
+      description: "International real estate investment"
+    },
+    {
+      label: "HOME LISTINGS",
+      value: "+25%",
+      change: "YoY",
       trend: "up",
       icon: Building,
-      description: "Units under construction"
+      description: "US residential inventory"
     },
     {
-      label: "ACTIVE INVESTORS",
-      value: "156,400",
-      change: "+8.7%",
+      label: "PRIME RESIDENTIAL",
+      value: "+2.8%",
+      change: "Global",
       trend: "up",
       icon: Users,
-      description: "Registered investor accounts"
+      description: "Luxury market price growth"
+    },
+    {
+      label: "SEOUL MARKET",
+      value: "+18.4%",
+      change: "YoY",
+      trend: "up",
+      icon: TrendingUp,
+      description: "Fastest global city growth"
     }
   ];
 
