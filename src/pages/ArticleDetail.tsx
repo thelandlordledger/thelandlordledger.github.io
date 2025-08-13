@@ -95,6 +95,33 @@ export default function ArticleDetail() {
     fetchArticle();
   }, [slugOrId]);
 
+  // Generate full URL for sharing (moved here to avoid hook violations)
+  const articleUrl = article ? generateCanonicalUrl(article) : '';
+  
+  // Get optimized image URL (moved here to avoid hook violations)
+  const getImageUrl = (imageUrl?: string) => {
+    if (!imageUrl) return undefined;
+    if (imageUrl.includes('secondary-markets-hero')) return secondaryMarketsHero;
+    return imageUrl;
+  };
+
+  // Inject structured data for SEO (moved before early returns)
+  useEffect(() => {
+    if (article) {
+      injectStructuredData({
+        title: article.title,
+        description: article.excerpt || article.subtitle || `${article.title} - Expert analysis and insights from Landlord Ledger`,
+        image: getImageUrl(article.image_url),
+        url: articleUrl,
+        type: 'article',
+        publishedDate: article.published_date || article.created_at,
+        modifiedDate: article.updated_at,
+        author: article.author_name,
+        category: article.category
+      });
+    }
+  }, [article, articleUrl]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background pt-28">
@@ -144,32 +171,6 @@ export default function ArticleDetail() {
     );
   }
 
-  // Generate full URL for sharing
-  const articleUrl = generateCanonicalUrl(article);
-  
-  // Get optimized image URL
-  const getImageUrl = (imageUrl?: string) => {
-    if (!imageUrl) return undefined;
-    if (imageUrl.includes('secondary-markets-hero')) return secondaryMarketsHero;
-    return imageUrl;
-  };
-
-  // Inject structured data for SEO
-  useEffect(() => {
-    if (article) {
-      injectStructuredData({
-        title: article.title,
-        description: article.excerpt || article.subtitle || `${article.title} - Expert analysis and insights from Landlord Ledger`,
-        image: getImageUrl(article.image_url),
-        url: articleUrl,
-        type: 'article',
-        publishedDate: article.published_date || article.created_at,
-        modifiedDate: article.updated_at,
-        author: article.author_name,
-        category: article.category
-      });
-    }
-  }, [article, articleUrl]);
 
   return (
     <div className="min-h-screen bg-background pt-28">
