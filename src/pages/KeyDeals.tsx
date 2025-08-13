@@ -4,149 +4,143 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Building2, MapPin, DollarSign, Calendar, TrendingUp, ArrowRight, Users, Clock } from "lucide-react";
-
 const KeyDeals = () => {
-  const featuredDeals = [
-    {
-      title: "Manhattan Office Tower Acquisition",
-      location: "New York, NY",
-      value: "$2.8B",
-      type: "Commercial",
-      date: "December 12, 2024",
-      buyer: "Blackstone Group",
-      seller: "Brookfield Properties",
-      description: "Landmark 52-story office building in Midtown Manhattan featuring premium tenants and recent renovations.",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-      details: {
-        sqft: "1.2M",
-        capRate: "5.2%",
-        occupancy: "94%"
-      },
-      status: "Closed"
+  const featuredDeals = [{
+    title: "Manhattan Office Tower Acquisition",
+    location: "New York, NY",
+    value: "$2.8B",
+    type: "Commercial",
+    date: "December 12, 2024",
+    buyer: "Blackstone Group",
+    seller: "Brookfield Properties",
+    description: "Landmark 52-story office building in Midtown Manhattan featuring premium tenants and recent renovations.",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    details: {
+      sqft: "1.2M",
+      capRate: "5.2%",
+      occupancy: "94%"
     },
-    {
-      title: "Sunbelt Multifamily Portfolio",
-      location: "Austin, Phoenix, Tampa",
-      value: "$1.4B",
-      type: "Multifamily", 
-      date: "December 10, 2024",
-      buyer: "Starwood Capital",
-      seller: "AvalonBay Communities",
-      description: "Portfolio of 12 Class A apartment communities across high-growth Sunbelt markets.",
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
-      details: {
-        units: "3,247",
-        capRate: "4.8%",
-        occupancy: "96%"
-      },
-      status: "Closed"
+    status: "Closed"
+  }, {
+    title: "Sunbelt Multifamily Portfolio",
+    location: "Austin, Phoenix, Tampa",
+    value: "$1.4B",
+    type: "Multifamily",
+    date: "December 10, 2024",
+    buyer: "Starwood Capital",
+    seller: "AvalonBay Communities",
+    description: "Portfolio of 12 Class A apartment communities across high-growth Sunbelt markets.",
+    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
+    details: {
+      units: "3,247",
+      capRate: "4.8%",
+      occupancy: "96%"
     },
-    {
-      title: "West Coast Logistics Portfolio",
-      location: "Los Angeles, CA",
-      value: "$950M",
-      type: "Industrial",
-      date: "December 8, 2024",
-      buyer: "Prologis Inc.",
-      seller: "EXR Industrial",
-      description: "Strategic industrial assets near major ports with long-term e-commerce tenant leases.",
-      image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80",
-      details: {
-        sqft: "2.8M",
-        capRate: "4.1%",
-        occupancy: "98%"
-      },
-      status: "Under Contract"
-    }
-  ];
-
-  const recentTransactions = [
-    {
-      property: "The Spiral Tower",
-      location: "Hudson Yards, NY",
-      price: "$4.2B",
-      type: "Office",
-      date: "Dec 15, 2024",
-      trend: "up"
+    status: "Closed"
+  }, {
+    title: "West Coast Logistics Portfolio",
+    location: "Los Angeles, CA",
+    value: "$950M",
+    type: "Industrial",
+    date: "December 8, 2024",
+    buyer: "Prologis Inc.",
+    seller: "EXR Industrial",
+    description: "Strategic industrial assets near major ports with long-term e-commerce tenant leases.",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80",
+    details: {
+      sqft: "2.8M",
+      capRate: "4.1%",
+      occupancy: "98%"
     },
-    {
-      property: "Miami Beach Resort Portfolio",
-      location: "Miami Beach, FL", 
-      price: "$850M",
-      type: "Hospitality",
-      date: "Dec 14, 2024",
-      trend: "up"
-    },
-    {
-      property: "Silicon Valley Tech Campus",
-      location: "Palo Alto, CA",
-      price: "$1.9B",
-      type: "Office",
-      date: "Dec 13, 2024",
-      trend: "down"
-    },
-    {
-      property: "Denver Mixed-Use Development",
-      location: "Denver, CO",
-      price: "$650M",
-      type: "Mixed-Use",
-      date: "Dec 12, 2024",
-      trend: "up"
-    },
-    {
-      property: "Chicago Multifamily Complex",
-      location: "Chicago, IL",
-      price: "$425M",
-      type: "Multifamily",
-      date: "Dec 11, 2024",
-      trend: "up"
-    },
-    {
-      property: "Atlanta Distribution Center",
-      location: "Atlanta, GA",
-      price: "$320M",
-      type: "Industrial",
-      date: "Dec 10, 2024",
-      trend: "up"
-    }
-  ];
-
-  const marketActivity = [
-    { metric: "Total Transaction Volume", value: "$47.3B", change: "+12.8%", period: "Q4 2024" },
-    { metric: "Number of Deals", value: "1,247", change: "+8.4%", period: "This Quarter" },
-    { metric: "Average Deal Size", value: "$38M", change: "+4.2%", period: "YTD 2024" },
-    { metric: "Cap Rate Average", value: "5.1%", change: "-0.3%", period: "Current" }
-  ];
-
-  const upcomingDeals = [
-    {
-      title: "Seattle Waterfront Development",
-      location: "Seattle, WA",
-      estimate: "$1.2B",
-      type: "Mixed-Use",
-      timeline: "Q1 2025",
-      status: "Marketing"
-    },
-    {
-      title: "Dallas Office Portfolio",
-      location: "Dallas, TX", 
-      estimate: "$875M",
-      type: "Office",
-      timeline: "Q1 2025",
-      status: "Due Diligence"
-    },
-    {
-      title: "Florida Retail Centers",
-      location: "Orlando, FL",
-      estimate: "$540M", 
-      type: "Retail",
-      timeline: "Q2 2025",
-      status: "Bidding"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background">
+    status: "Under Contract"
+  }];
+  const recentTransactions = [{
+    property: "The Spiral Tower",
+    location: "Hudson Yards, NY",
+    price: "$4.2B",
+    type: "Office",
+    date: "Dec 15, 2024",
+    trend: "up"
+  }, {
+    property: "Miami Beach Resort Portfolio",
+    location: "Miami Beach, FL",
+    price: "$850M",
+    type: "Hospitality",
+    date: "Dec 14, 2024",
+    trend: "up"
+  }, {
+    property: "Silicon Valley Tech Campus",
+    location: "Palo Alto, CA",
+    price: "$1.9B",
+    type: "Office",
+    date: "Dec 13, 2024",
+    trend: "down"
+  }, {
+    property: "Denver Mixed-Use Development",
+    location: "Denver, CO",
+    price: "$650M",
+    type: "Mixed-Use",
+    date: "Dec 12, 2024",
+    trend: "up"
+  }, {
+    property: "Chicago Multifamily Complex",
+    location: "Chicago, IL",
+    price: "$425M",
+    type: "Multifamily",
+    date: "Dec 11, 2024",
+    trend: "up"
+  }, {
+    property: "Atlanta Distribution Center",
+    location: "Atlanta, GA",
+    price: "$320M",
+    type: "Industrial",
+    date: "Dec 10, 2024",
+    trend: "up"
+  }];
+  const marketActivity = [{
+    metric: "Total Transaction Volume",
+    value: "$47.3B",
+    change: "+12.8%",
+    period: "Q4 2024"
+  }, {
+    metric: "Number of Deals",
+    value: "1,247",
+    change: "+8.4%",
+    period: "This Quarter"
+  }, {
+    metric: "Average Deal Size",
+    value: "$38M",
+    change: "+4.2%",
+    period: "YTD 2024"
+  }, {
+    metric: "Cap Rate Average",
+    value: "5.1%",
+    change: "-0.3%",
+    period: "Current"
+  }];
+  const upcomingDeals = [{
+    title: "Seattle Waterfront Development",
+    location: "Seattle, WA",
+    estimate: "$1.2B",
+    type: "Mixed-Use",
+    timeline: "Q1 2025",
+    status: "Marketing"
+  }, {
+    title: "Dallas Office Portfolio",
+    location: "Dallas, TX",
+    estimate: "$875M",
+    type: "Office",
+    timeline: "Q1 2025",
+    status: "Due Diligence"
+  }, {
+    title: "Florida Retail Centers",
+    location: "Orlando, FL",
+    estimate: "$540M",
+    type: "Retail",
+    timeline: "Q2 2025",
+    status: "Bidding"
+  }];
+  return <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-16">
@@ -188,15 +182,10 @@ const KeyDeals = () => {
             </div>
 
             <div className="space-y-8">
-              {featuredDeals.map((deal, index) => (
-                <Card key={index} className="overflow-hidden hover-lift transition-all duration-300 group">
+              {featuredDeals.map((deal, index) => <Card key={index} className="overflow-hidden hover-lift transition-all duration-300 group">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
                     <div className="aspect-video lg:aspect-auto relative">
-                      <img 
-                        src={deal.image} 
-                        alt={deal.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      <img src={deal.image} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute top-4 left-4">
                         <Badge variant={deal.status === "Closed" ? "default" : "secondary"} className="bg-background/80 backdrop-blur-sm">
                           {deal.status}
@@ -226,12 +215,10 @@ const KeyDeals = () => {
                       </p>
                       
                       <div className="grid grid-cols-3 gap-4 mb-6">
-                        {Object.entries(deal.details).map(([key, value]) => (
-                          <div key={key} className="text-center p-3 bg-muted/30 rounded-lg">
+                        {Object.entries(deal.details).map(([key, value]) => <div key={key} className="text-center p-3 bg-muted/30 rounded-lg">
                             <div className="font-primary text-lg font-semibold text-foreground">{value}</div>
                             <div className="text-xs text-muted-foreground uppercase tracking-wide">{key}</div>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
@@ -246,8 +233,7 @@ const KeyDeals = () => {
                       </div>
                     </div>
                   </div>
-                </Card>
-              ))}
+                </Card>)}
             </div>
           </div>
         </section>
@@ -259,14 +245,11 @@ const KeyDeals = () => {
               <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
                 Transaction Activity
               </h2>
-              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
-                Real-time metrics and trends in commercial real estate deal flow and market velocity
-              </p>
+              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">Real-time metrics and trends in real estate deal flow and market velocity</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              {marketActivity.map((metric, index) => (
-                <Card key={index} className="p-6 text-center hover-lift transition-all duration-300 group">
+              {marketActivity.map((metric, index) => <Card key={index} className="p-6 text-center hover-lift transition-all duration-300 group">
                   <div className="font-primary text-3xl font-bold text-primary mb-2 group-hover:scale-105 transition-transform">
                     {metric.value}
                   </div>
@@ -278,8 +261,7 @@ const KeyDeals = () => {
                     <span className="text-primary font-medium">{metric.change}</span>
                     <span className="text-muted-foreground">{metric.period}</span>
                   </div>
-                </Card>
-              ))}
+                </Card>)}
             </div>
 
             {/* Recent Transactions Table */}
@@ -289,8 +271,7 @@ const KeyDeals = () => {
                 Recent Transactions
               </h3>
               <div className="space-y-4">
-                {recentTransactions.map((transaction, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:border-primary/30 transition-colors">
+                {recentTransactions.map((transaction, index) => <div key={index} className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:border-primary/30 transition-colors">
                     <div className="flex-1">
                       <h4 className="font-accent font-medium text-foreground mb-1">{transaction.property}</h4>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -309,8 +290,7 @@ const KeyDeals = () => {
                         <span>Market Move</span>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </Card>
           </div>
@@ -329,8 +309,7 @@ const KeyDeals = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {upcomingDeals.map((deal, index) => (
-                <Card key={index} className="p-6 hover-lift transition-all duration-300 group">
+              {upcomingDeals.map((deal, index) => <Card key={index} className="p-6 hover-lift transition-all duration-300 group">
                   <div className="flex items-start justify-between mb-4">
                     <Badge variant="outline" className="text-xs">{deal.type}</Badge>
                     <Badge variant="secondary" className="text-xs">{deal.status}</Badge>
@@ -356,8 +335,7 @@ const KeyDeals = () => {
                     Track Opportunity
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
-                </Card>
-              ))}
+                </Card>)}
             </div>
 
             <div className="text-center">
@@ -371,8 +349,6 @@ const KeyDeals = () => {
       </main>
 
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default KeyDeals;
