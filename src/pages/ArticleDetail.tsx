@@ -5,13 +5,16 @@ import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ArticleMeta } from "@/components/ArticleMeta";
+import { SocialShare } from "@/components/SocialShare";
+import { generateCanonicalUrl } from "@/utils/articleUtils";
+import { injectStructuredData } from "@/utils/seo";
 import { 
   Clock, 
   Eye, 
   Calendar, 
   User, 
   ArrowLeft,
-  Share2,
   BookOpen
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -141,9 +144,47 @@ export default function ArticleDetail() {
     );
   }
 
+  // Generate full URL for sharing
+  const articleUrl = generateCanonicalUrl(article);
+  
+  // Get optimized image URL
+  const getImageUrl = (imageUrl?: string) => {
+    if (!imageUrl) return undefined;
+    if (imageUrl.includes('secondary-markets-hero')) return secondaryMarketsHero;
+    return imageUrl;
+  };
+
+  // Inject structured data for SEO
+  useEffect(() => {
+    if (article) {
+      injectStructuredData({
+        title: article.title,
+        description: article.excerpt || article.subtitle || `${article.title} - Expert analysis and insights from Landlord Ledger`,
+        image: getImageUrl(article.image_url),
+        url: articleUrl,
+        type: 'article',
+        publishedDate: article.published_date || article.created_at,
+        modifiedDate: article.updated_at,
+        author: article.author_name,
+        category: article.category
+      });
+    }
+  }, [article, articleUrl]);
+
   return (
     <div className="min-h-screen bg-background pt-28">
       <Header />
+      
+      {/* Meta tags for SEO and social sharing */}
+      <ArticleMeta
+        title={article.title}
+        description={article.excerpt || article.subtitle || `${article.title} - Expert analysis and insights from Landlord Ledger`}
+        image={getImageUrl(article.image_url)}
+        url={articleUrl}
+        publishedDate={article.published_date || article.created_at}
+        author={article.author_name}
+        category={article.category}
+      />
       
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-4xl mx-auto">
@@ -204,10 +245,11 @@ export default function ArticleDetail() {
 
             {/* Actions */}
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share Article
-              </Button>
+              <SocialShare 
+                title={article.title}
+                url={articleUrl}
+                description={article.excerpt || article.subtitle}
+              />
             </div>
           </div>
 
@@ -215,7 +257,7 @@ export default function ArticleDetail() {
           {article.image_url && (
             <div className="mb-12">
               <img 
-                src={article.image_url.includes('secondary-markets-hero') ? secondaryMarketsHero : article.image_url} 
+                src={getImageUrl(article.image_url)} 
                 alt={article.title}
                 className="w-full h-96 md:h-[500px] object-cover rounded-xl shadow-2xl"
               />
