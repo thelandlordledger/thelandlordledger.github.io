@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { ContentManagement } from "@/components/admin/ContentManagement";
+import DealsManagement from "@/components/admin/DealsManagement";
 import { EventsManagement } from "@/components/admin/EventsManagement";
 import { MarketDataManagement } from "@/components/admin/MarketDataManagement";
 import { TeamManagement } from "@/components/admin/TeamManagement";
@@ -43,6 +44,7 @@ const Admin = () => {
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
         <Route path="/content/*" element={<ContentManagement />} />
+        <Route path="/deals" element={<DealsManagement />} />
         <Route path="/carousel" element={<CarouselManagement />} />
         <Route path="/events" element={<EventsManagement />} />
         <Route path="/market-data" element={<MarketDataManagement />} />

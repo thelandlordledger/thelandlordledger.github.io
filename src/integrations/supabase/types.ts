@@ -107,6 +107,165 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          announcement_date: string | null
+          broker: string | null
+          buyer: string | null
+          buyer_type: string | null
+          cap_rate: number | null
+          city: string | null
+          closing_date: string | null
+          competitive_dynamics: string | null
+          confidence_score: number | null
+          country: string | null
+          created_at: string
+          data_quality_score: number | null
+          deal_highlights: Json | null
+          deal_id: string
+          deal_name: string
+          deal_size_category: string | null
+          deal_status: string
+          deal_value: number | null
+          deal_value_formatted: string | null
+          featured_deal: boolean | null
+          full_address: string | null
+          id: string
+          image_url: string | null
+          investment_strategy: string | null
+          last_updated: string | null
+          latitude: number | null
+          lender: string | null
+          longitude: number | null
+          market_intelligence: string | null
+          occupancy_rate: number | null
+          pipeline_deal: boolean | null
+          postal_code: string | null
+          price_per_sf: number | null
+          property_name: string | null
+          property_subtype: string | null
+          property_type: string | null
+          published: boolean | null
+          recent_deal: boolean | null
+          region: string | null
+          seller: string | null
+          seller_type: string | null
+          source: string | null
+          square_footage: number | null
+          state_province: string | null
+          strategic_significance: string | null
+          street_address: string | null
+          transaction_type: string
+          trending_deal: boolean | null
+          updated_at: string
+          year_built: number | null
+        }
+        Insert: {
+          announcement_date?: string | null
+          broker?: string | null
+          buyer?: string | null
+          buyer_type?: string | null
+          cap_rate?: number | null
+          city?: string | null
+          closing_date?: string | null
+          competitive_dynamics?: string | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string
+          data_quality_score?: number | null
+          deal_highlights?: Json | null
+          deal_id: string
+          deal_name: string
+          deal_size_category?: string | null
+          deal_status?: string
+          deal_value?: number | null
+          deal_value_formatted?: string | null
+          featured_deal?: boolean | null
+          full_address?: string | null
+          id?: string
+          image_url?: string | null
+          investment_strategy?: string | null
+          last_updated?: string | null
+          latitude?: number | null
+          lender?: string | null
+          longitude?: number | null
+          market_intelligence?: string | null
+          occupancy_rate?: number | null
+          pipeline_deal?: boolean | null
+          postal_code?: string | null
+          price_per_sf?: number | null
+          property_name?: string | null
+          property_subtype?: string | null
+          property_type?: string | null
+          published?: boolean | null
+          recent_deal?: boolean | null
+          region?: string | null
+          seller?: string | null
+          seller_type?: string | null
+          source?: string | null
+          square_footage?: number | null
+          state_province?: string | null
+          strategic_significance?: string | null
+          street_address?: string | null
+          transaction_type: string
+          trending_deal?: boolean | null
+          updated_at?: string
+          year_built?: number | null
+        }
+        Update: {
+          announcement_date?: string | null
+          broker?: string | null
+          buyer?: string | null
+          buyer_type?: string | null
+          cap_rate?: number | null
+          city?: string | null
+          closing_date?: string | null
+          competitive_dynamics?: string | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string
+          data_quality_score?: number | null
+          deal_highlights?: Json | null
+          deal_id?: string
+          deal_name?: string
+          deal_size_category?: string | null
+          deal_status?: string
+          deal_value?: number | null
+          deal_value_formatted?: string | null
+          featured_deal?: boolean | null
+          full_address?: string | null
+          id?: string
+          image_url?: string | null
+          investment_strategy?: string | null
+          last_updated?: string | null
+          latitude?: number | null
+          lender?: string | null
+          longitude?: number | null
+          market_intelligence?: string | null
+          occupancy_rate?: number | null
+          pipeline_deal?: boolean | null
+          postal_code?: string | null
+          price_per_sf?: number | null
+          property_name?: string | null
+          property_subtype?: string | null
+          property_type?: string | null
+          published?: boolean | null
+          recent_deal?: boolean | null
+          region?: string | null
+          seller?: string | null
+          seller_type?: string | null
+          source?: string | null
+          square_footage?: number | null
+          state_province?: string | null
+          strategic_significance?: string | null
+          street_address?: string | null
+          transaction_type?: string
+          trending_deal?: boolean | null
+          updated_at?: string
+          year_built?: number | null
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           capacity: number | null
