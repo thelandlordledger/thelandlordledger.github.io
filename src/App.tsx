@@ -9,7 +9,7 @@ import MarketTrends from "./pages/MarketTrends";
 import KeyDeals from "./pages/KeyDeals";
 
 
-import AIChat from "./pages/AIChat";
+
 import Events from "./pages/Events";
 import Admin from "./pages/Admin";
 import MarketAnalysis from "./pages/MarketAnalysis";
@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/key-deals" element={<KeyDeals />} />
           
           
-          <Route path="/ai-chat" element={<AIChat />} />
+          
           <Route path="/events" element={<Events />} />
           <Route path="/market-analysis" element={<MarketAnalysis />} />
           <Route path="/article/:slugOrId" element={<ArticleDetail />} />
