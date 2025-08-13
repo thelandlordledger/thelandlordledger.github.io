@@ -144,84 +144,104 @@ const KeyDeals = () => {
       <Header />
       
       <main className="pt-16">
-        {/* Hero Section */}
-        <section className="py-20 bg-subtle-gradient relative overflow-hidden">
+        {/* Hero Section - Streamlined */}
+        <section className="py-12 lg:py-16 bg-subtle-gradient relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1600&q=80')] bg-cover bg-center opacity-5"></div>
-          <div className="relative z-10 container mx-auto px-6 text-center">
-            <h1 className="font-primary text-5xl md:text-6xl font-semibold text-foreground mb-6">
+          <div className="relative z-10 container mx-auto px-4 lg:px-6 text-center">
+            <h1 className="font-primary text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-4 lg:mb-6">
               KEY
               <br />
               <span className="bg-hero-gradient bg-clip-text text-transparent">DEALS</span>
             </h1>
-            <p className="font-secondary text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="font-secondary text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 lg:mb-8 leading-relaxed">
               Exclusive insights into major real estate transactions, market-moving deals, and strategic investments shaping the industry
             </p>
-            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
-                <span>$47.3B Total Volume</span>
+            
+            {/* Hero Stats Cards */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-8 max-w-lg mx-auto">
+              <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50">
+                <DollarSign className="w-4 h-4 text-primary" />
+                <span className="font-accent text-sm font-medium text-foreground">$47.3B Total Volume</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>Q4 2024</span>
+              <div className="flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm rounded-lg border border-border/50">
+                <Calendar className="w-4 h-4 text-primary" />
+                <span className="font-accent text-sm font-medium text-foreground">Q4 2024</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Featured Deals */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
+        {/* Featured Deals - Enhanced Layout */}
+        <section className="py-16 lg:py-24 bg-background">
+          <div className="container mx-auto px-4 lg:px-6">
+            {/* Section Header */}
+            <div className="text-center mb-12 lg:mb-16">
+              <h2 className="font-primary text-3xl lg:text-4xl font-semibold text-foreground mb-3 lg:mb-4">
                 Featured Transactions
               </h2>
-              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="font-secondary text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Landmark deals and strategic acquisitions driving market dynamics and setting new benchmarks
               </p>
             </div>
 
-            <div className="space-y-8">
-              {featuredDeals.map((deal, index) => <Card key={index} className="overflow-hidden hover-lift transition-all duration-300 group">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-                    <div className="aspect-video lg:aspect-auto relative">
-                      <img src={deal.image} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            {/* Deal Cards */}
+            <div className="space-y-8 lg:space-y-12">
+              {featuredDeals.map((deal, index) => (
+                <Card key={index} className="overflow-hidden hover-lift transition-all duration-300 group shadow-card">
+                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+                    {/* Image Section */}
+                    <div className="lg:col-span-2 aspect-[16/10] lg:aspect-auto relative">
+                      <img 
+                        src={deal.image} 
+                        alt={deal.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                       <div className="absolute top-4 left-4">
-                        <Badge variant={deal.status === "Closed" ? "default" : "secondary"} className="bg-background/80 backdrop-blur-sm">
+                        <Badge 
+                          variant={deal.status === "Closed" ? "default" : "secondary"} 
+                          className="bg-background/90 backdrop-blur-sm shadow-sm"
+                        >
                           {deal.status}
                         </Badge>
                       </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent lg:hidden"></div>
                     </div>
-                    <div className="p-8">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <Badge variant="outline" className="mb-2">{deal.type}</Badge>
-                          <h3 className="font-primary text-2xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    
+                    {/* Content Section */}
+                    <div className="lg:col-span-3 p-6 lg:p-8">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 lg:mb-6">
+                        <div className="flex-1">
+                          <Badge variant="outline" className="mb-3">{deal.type}</Badge>
+                          <h3 className="font-primary text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3 group-hover:text-primary transition-colors line-clamp-2">
                             {deal.title}
                           </h3>
-                          <div className="flex items-center gap-2 text-muted-foreground mb-3">
-                            <MapPin className="w-4 h-4" />
-                            <span className="font-secondary">{deal.location}</span>
+                          <div className="flex items-center gap-2 text-muted-foreground mb-4 lg:mb-0">
+                            <MapPin className="w-4 h-4 flex-shrink-0" />
+                            <span className="font-secondary text-sm lg:text-base">{deal.location}</span>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-primary text-3xl font-bold text-primary">{deal.value}</div>
+                        <div className="text-left lg:text-right lg:ml-6">
+                          <div className="font-primary text-2xl lg:text-3xl font-bold text-primary">{deal.value}</div>
                           <div className="text-sm text-muted-foreground">{deal.date}</div>
                         </div>
                       </div>
                       
-                      <p className="font-secondary text-muted-foreground mb-6 leading-relaxed">
+                      <p className="font-secondary text-muted-foreground mb-6 leading-relaxed line-clamp-3 lg:line-clamp-none">
                         {deal.description}
                       </p>
                       
-                      <div className="grid grid-cols-3 gap-4 mb-6">
-                        {Object.entries(deal.details).map(([key, value]) => <div key={key} className="text-center p-3 bg-muted/30 rounded-lg">
-                            <div className="font-primary text-lg font-semibold text-foreground">{value}</div>
-                            <div className="text-xs text-muted-foreground uppercase tracking-wide">{key}</div>
-                          </div>)}
+                      {/* Metrics Grid */}
+                      <div className="grid grid-cols-3 gap-3 lg:gap-4 mb-6">
+                        {Object.entries(deal.details).map(([key, value]) => (
+                          <div key={key} className="text-center p-3 lg:p-4 bg-muted/30 rounded-lg border border-border/30">
+                            <div className="font-primary text-base lg:text-lg font-semibold text-foreground">{value}</div>
+                            <div className="text-xs text-muted-foreground uppercase tracking-wide mt-1">{key}</div>
+                          </div>
+                        ))}
                       </div>
                       
-                      <div className="flex items-center justify-between text-sm">
+                      {/* Transaction Parties */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm bg-muted/20 rounded-lg p-4">
                         <div>
                           <span className="text-muted-foreground">Buyer: </span>
                           <span className="font-medium text-foreground">{deal.buyer}</span>
@@ -233,7 +253,8 @@ const KeyDeals = () => {
                       </div>
                     </div>
                   </div>
-                </Card>)}
+                </Card>
+              ))}
             </div>
           </div>
         </section>
@@ -296,53 +317,78 @@ const KeyDeals = () => {
           </div>
         </section>
 
-        {/* Upcoming Deals Pipeline */}
-        <section className="py-20 bg-background">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
+        {/* Upcoming Deals Pipeline - Enhanced */}
+        <section className="py-16 lg:py-24 bg-background">
+          <div className="container mx-auto px-4 lg:px-6">
+            {/* Section Header */}
+            <div className="text-center mb-12 lg:mb-16">
+              <h2 className="font-primary text-3xl lg:text-4xl font-semibold text-foreground mb-3 lg:mb-4">
                 Pipeline & Upcoming Opportunities
               </h2>
-              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="font-secondary text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Exclusive access to deals in various stages of execution and upcoming market opportunities
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {upcomingDeals.map((deal, index) => <Card key={index} className="p-6 hover-lift transition-all duration-300 group">
-                  <div className="flex items-start justify-between mb-4">
+            {/* Deal Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12 lg:mb-16">
+              {upcomingDeals.map((deal, index) => (
+                <Card key={index} className="p-6 hover-lift transition-all duration-300 group shadow-card h-full">
+                  {/* Status Badges */}
+                  <div className="flex items-center justify-between mb-4">
                     <Badge variant="outline" className="text-xs">{deal.type}</Badge>
-                    <Badge variant="secondary" className="text-xs">{deal.status}</Badge>
+                    <Badge 
+                      variant={deal.status === "Marketing" ? "default" : "secondary"} 
+                      className="text-xs"
+                    >
+                      {deal.status}
+                    </Badge>
                   </div>
-                  <h3 className="font-primary text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  
+                  {/* Deal Title */}
+                  <h3 className="font-primary text-lg lg:text-xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
                     {deal.title}
                   </h3>
-                  <div className="space-y-2 text-sm mb-4">
+                  
+                  {/* Deal Details */}
+                  <div className="space-y-3 text-sm mb-6 flex-1">
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
-                      <span>{deal.location}</span>
+                      <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{deal.location}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <DollarSign className="w-4 h-4" />
-                      <span>Est. {deal.estimate}</span>
+                      <DollarSign className="w-4 h-4 flex-shrink-0" />
+                      <span className="font-medium text-foreground">Est. {deal.estimate}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
+                      <Calendar className="w-4 h-4 flex-shrink-0" />
                       <span>{deal.timeline}</span>
                     </div>
                   </div>
-                  <Button variant="ghost" className="w-full group/btn">
+                  
+                  {/* CTA Button */}
+                  <Button variant="ghost" className="w-full group/btn border border-border/50 hover:border-primary/30">
                     Track Opportunity
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
-                </Card>)}
+                </Card>
+              ))}
             </div>
 
+            {/* CTA Section */}
             <div className="text-center">
-              <Button variant="premium" size="lg" className="group">
-                Access Full Deal Pipeline
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <div className="inline-flex flex-col items-center gap-4 p-8 bg-muted/20 rounded-2xl border border-border/50">
+                <h3 className="font-primary text-xl lg:text-2xl font-semibold text-foreground">
+                  Access Premium Deal Intelligence
+                </h3>
+                <p className="text-muted-foreground text-sm lg:text-base max-w-md">
+                  Get exclusive access to our complete deal pipeline and advanced market analytics
+                </p>
+                <Button size="lg" className="group">
+                  Access Full Deal Pipeline
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
             </div>
           </div>
         </section>
