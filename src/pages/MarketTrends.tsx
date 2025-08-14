@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap, Construction, CreditCard, TrendingDownIcon, BarChart4, Users, Percent, ArrowUpDown, Eye, Download, Share, Bell, Play, Pause, Info, ExternalLink, MapIcon, Calendar as CalendarIcon } from "lucide-react";
+import ChoroplethMap from "@/components/ChoroplethMap";
 
 const MarketTrends = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
@@ -1002,20 +1003,11 @@ const MarketTrends = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-              {/* Choropleth Map Placeholder */}
-              <Card className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-accent font-semibold text-foreground">Global Price Heat Map</h3>
-                  <MapIcon className="w-5 h-5 text-primary" />
-                </div>
-                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
-                  <div className="text-center">
-                    <Globe className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Interactive choropleth map</p>
-                    <p className="text-xs text-muted-foreground">Color intensity = Price/SF</p>
-                  </div>
-                </div>
-              </Card>
+              {/* Interactive Choropleth Map */}
+              <ChoroplethMap 
+                selectedRegion={selectedRegion}
+                selectedTimeWindow={selectedTimeWindow}
+              />
 
               {/* Bubble Map Placeholder */}
               <Card className="p-6">
