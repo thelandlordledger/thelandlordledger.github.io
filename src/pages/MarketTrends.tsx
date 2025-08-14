@@ -809,26 +809,41 @@ const MarketTrends = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-              {allKPIs.slice(0, 3).map((kpi, index) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {allKPIs.map((kpi, index) => {
                 const isPositive = kpi.trend === "up";
                 const IconComponent = kpi.icon;
                 return (
-                  <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="p-2 rounded-lg bg-muted">
+                  <Card key={index} className="p-6 hover:shadow-lg transition-all duration-200 bg-background border">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3 rounded-lg bg-muted/50">
                         <IconComponent className="w-5 h-5 text-foreground" />
                       </div>
-                      <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                        <span className="font-medium">{kpi.change}</span>
+                      <div className={`flex items-center gap-1 text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                        {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                        <span>{kpi.change}</span>
                       </div>
+                    </div>
+                    
+                    {/* Simple trend line */}
+                    <div className="h-6 mb-4">
+                      <svg className="w-full h-full" viewBox="0 0 100 20">
+                        <polyline
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                          points={kpi.sparkline.map((value, i) => 
+                            `${(i / (kpi.sparkline.length - 1)) * 100},${20 - (value / Math.max(...kpi.sparkline)) * 18}`
+                          ).join(' ')}
+                        />
+                      </svg>
                     </div>
                     
                     <div className="space-y-1">
                       <h3 className="text-2xl font-bold text-foreground">{kpi.value}</h3>
-                      <h4 className="text-sm font-medium text-foreground">{kpi.title}</h4>
-                      <p className="text-xs text-muted-foreground">{kpi.description}</p>
+                      <h4 className="font-medium text-foreground">{kpi.title}</h4>
+                      <p className="text-sm text-muted-foreground">{kpi.description}</p>
                     </div>
                   </Card>
                 );
