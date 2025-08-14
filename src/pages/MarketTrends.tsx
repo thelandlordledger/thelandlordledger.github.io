@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap } from "lucide-react";
+import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap, Construction, CreditCard, TrendingDownIcon, BarChart4, Users, Percent, ArrowUpDown, Eye } from "lucide-react";
 
 const MarketTrends = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
@@ -14,6 +14,9 @@ const MarketTrends = () => {
   const [selectedSector, setSelectorSector] = useState("all");
   const [selectedSubSector, setSelectedSubSector] = useState("all");
   const [selectedTimeWindow, setSelectedTimeWindow] = useState("rolling-12");
+  const [selectedSubSectors, setSelectedSubSectors] = useState<string[]>([]);
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSelections, setCompareSelections] = useState<string[]>([]);
 
   // Time window options
   const timeWindows = [
@@ -251,6 +254,52 @@ const MarketTrends = () => {
         icon: Zap,
         category: "Occupancy & Demand"
       }
+    ],
+    "supply-pipeline": [
+      {
+        title: "Under Construction",
+        value: "47.2M SF",
+        change: "+22.1%",
+        trend: "up",
+        description: "New developments in pipeline",
+        sparkline: [35, 37, 39, 41, 43, 45, 46, 47, 48, 47, 47, 47],
+        icon: Construction,
+        category: "Supply & Pipeline"
+      }
+    ],
+    "financing-cost": [
+      {
+        title: "Avg CRE Loan Rate",
+        value: "7.2%",
+        change: "+1.8%",
+        trend: "up",
+        description: "Commercial real estate financing",
+        sparkline: [5.1, 5.4, 5.8, 6.2, 6.5, 6.8, 7.0, 7.1, 7.2, 7.3, 7.2, 7.2],
+        icon: CreditCard,
+        category: "Financing & Cost"
+      },
+      {
+        title: "% Transactions Financed",
+        value: "73%",
+        change: "-4.2%",
+        trend: "down",
+        description: "Share of leveraged transactions",
+        sparkline: [82, 80, 78, 76, 75, 74, 73, 73, 72, 73, 73, 73],
+        icon: Percent,
+        category: "Financing & Cost"
+      }
+    ],
+    "sentiment-access": [
+      {
+        title: "Cap Rate Spread",
+        value: "285 bps",
+        change: "+45 bps",
+        trend: "up",
+        description: "vs 10-year treasury",
+        sparkline: [220, 230, 240, 250, 260, 270, 275, 280, 285, 290, 285, 285],
+        icon: BarChart4,
+        category: "Sentiment & Access"
+      }
     ]
   };
 
@@ -258,7 +307,63 @@ const MarketTrends = () => {
   const allKPIs = [
     ...coreKPIFamilies["market-activity"],
     ...coreKPIFamilies["valuation-returns"],
-    ...coreKPIFamilies["occupancy-demand"]
+    ...coreKPIFamilies["occupancy-demand"],
+    ...coreKPIFamilies["supply-pipeline"],
+    ...coreKPIFamilies["financing-cost"],
+    ...coreKPIFamilies["sentiment-access"]
+  ];
+
+  // Sector-specific metrics based on the suggestion
+  const sectorSpecificMetrics = {
+    office: {
+      title: "Office Market Intelligence",
+      metrics: [
+        { label: "CBD Vacancy", value: "12.4%", change: "-0.8%", trend: "down" },
+        { label: "Suburban Vacancy", value: "15.2%", change: "+1.2%", trend: "up" },
+        { label: "Class A Rent/SF", value: "$65.40", change: "+3.2%", trend: "up" },
+        { label: "Sublease Availability", value: "8.7M SF", change: "-12.3%", trend: "down" },
+        { label: "Remote Work Index", value: "2.8", change: "-15.4%", trend: "down" }
+      ]
+    },
+    industrial: {
+      title: "Industrial & Logistics Intelligence",
+      metrics: [
+        { label: "Last-Mile Vacancy", value: "3.2%", change: "-0.5%", trend: "down" },
+        { label: "Regional Logistics Vacancy", value: "5.8%", change: "+0.3%", trend: "up" },
+        { label: "Rent Growth YoY", value: "+8.7%", change: "+2.1%", trend: "up" },
+        { label: "Delivery Pipeline", value: "125M SF", change: "+18.5%", trend: "up" },
+        { label: "Average Dock Doors", value: "24", change: "+12%", trend: "up" }
+      ]
+    },
+    retail: {
+      title: "Retail Market Intelligence",
+      metrics: [
+        { label: "Sales per SF", value: "$485", change: "+6.2%", trend: "up" },
+        { label: "Anchor Vacancy", value: "7.8%", change: "-1.4%", trend: "down" },
+        { label: "Inline Vacancy", value: "11.2%", change: "+0.8%", trend: "up" },
+        { label: "Footfall Change", value: "+12.3%", change: "+8.1%", trend: "up" },
+        { label: "Avg Lease Term", value: "5.2 years", change: "-0.3 years", trend: "down" }
+      ]
+    },
+    residential: {
+      title: "Residential Market Intelligence", 
+      metrics: [
+        { label: "Median Sale Price", value: "$485K", change: "+7.8%", trend: "up" },
+        { label: "Rent per Unit", value: "$2,340", change: "+5.4%", trend: "up" },
+        { label: "Days on Market", value: "32", change: "-8 days", trend: "down" },
+        { label: "New Completions", value: "45K units", change: "+12.7%", trend: "up" },
+        { label: "Occupancy Rate", value: "94.2%", change: "+1.1%", trend: "up" }
+      ]
+    }
+  };
+
+  // Top movers data
+  const topMovers = [
+    { market: "Dubai, UAE", change: "+18.4%", sector: "Industrial", period: "MoM" },
+    { market: "Austin, TX", change: "+15.2%", sector: "Office", period: "YoY" },
+    { market: "Berlin, Germany", change: "+14.8%", sector: "Multifamily", period: "YoY" },
+    { market: "Singapore", change: "+13.9%", sector: "Industrial", period: "YoY" },
+    { market: "Miami, FL", change: "+12.7%", sector: "Retail", period: "YoY" }
   ];
 
   const regionalTrends = [
@@ -741,6 +846,109 @@ const MarketTrends = () => {
                 );
               })}
             </div>
+
+            {/* Top Movers Widget */}
+            <div className="bg-muted/30 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-accent font-semibold text-foreground">Top Market Movers</h3>
+                <Badge variant="outline" className="text-xs">
+                  {selectedTimeWindow.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {topMovers.map((mover, index) => (
+                  <div key={index} className="text-center p-3 bg-background rounded-lg border">
+                    <div className="text-lg font-bold text-primary mb-1">{mover.change}</div>
+                    <div className="text-sm font-medium text-foreground mb-1">{mover.market}</div>
+                    <div className="text-xs text-muted-foreground">{mover.sector} • {mover.period}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sector-Specific Intelligence */}
+        {selectedSubSector !== "all" && sectorSpecificMetrics[selectedSubSector as keyof typeof sectorSpecificMetrics] && (
+          <section className="py-16 bg-muted/20">
+            <div className="container mx-auto px-6">
+              <div className="mb-8">
+                <h2 className="font-primary text-3xl font-semibold text-foreground mb-2">
+                  {sectorSpecificMetrics[selectedSubSector as keyof typeof sectorSpecificMetrics].title}
+                </h2>
+                <p className="text-muted-foreground">
+                  Deep dive metrics specific to {selectedSubSector} market dynamics
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {sectorSpecificMetrics[selectedSubSector as keyof typeof sectorSpecificMetrics].metrics.map((metric, index) => {
+                  const isPositive = metric.trend === "up";
+                  return (
+                    <Card key={index} className="p-4 text-center hover-lift transition-all duration-300">
+                      <div className="text-2xl font-bold text-foreground mb-1">{metric.value}</div>
+                      <div className="text-sm font-medium text-foreground mb-2">{metric.label}</div>
+                      <div className={`flex items-center justify-center gap-1 text-xs ${isPositive ? 'text-primary' : 'text-destructive'}`}>
+                        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        <span>{metric.change}</span>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Compare Mode Toggle */}
+        <section className="py-8 bg-background border-b">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <ArrowUpDown className="w-4 h-4 text-primary" />
+                <span className="font-accent font-medium text-foreground">Compare Markets</span>
+              </div>
+              <Button
+                variant={compareMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCompareMode(!compareMode)}
+                className="gap-2"
+              >
+                <Eye className="w-4 h-4" />
+                {compareMode ? "Exit Compare" : "Compare Mode"}
+              </Button>
+            </div>
+            
+            {compareMode && (
+              <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Select markets or sectors to compare side-by-side
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["New York", "London", "Tokyo", "Singapore", "Berlin"].map((market) => (
+                    <Button
+                      key={market}
+                      variant={compareSelections.includes(market) ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        setCompareSelections(prev => 
+                          prev.includes(market) 
+                            ? prev.filter(m => m !== market)
+                            : [...prev, market].slice(0, 3) // Max 3 comparisons
+                        );
+                      }}
+                    >
+                      {market}
+                    </Button>
+                  ))}
+                </div>
+                {compareSelections.length > 0 && (
+                  <div className="mt-3 text-xs text-muted-foreground">
+                    Comparing: {compareSelections.join(", ")} • Maximum 3 selections
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
 
