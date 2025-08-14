@@ -9,19 +9,108 @@ import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Build
 
 const MarketTrends = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
+  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedCity, setSelectedCity] = useState("all");
   const [selectedSector, setSelectorSector] = useState("all");
   const [selectedSubSector, setSelectedSubSector] = useState("all");
 
+  // Hierarchical geography data structure
+  const geographyData = {
+    "north-america": {
+      label: "North America",
+      countries: {
+        "usa": { label: "United States", cities: ["new-york", "los-angeles", "chicago", "san-francisco", "miami", "boston", "washington-dc", "atlanta", "dallas", "seattle"] },
+        "canada": { label: "Canada", cities: ["toronto", "vancouver", "montreal", "calgary", "ottawa"] },
+        "mexico": { label: "Mexico", cities: ["mexico-city", "guadalajara", "monterrey"] }
+      }
+    },
+    "europe": {
+      label: "Europe",
+      countries: {
+        "uk": { label: "United Kingdom", cities: ["london", "manchester", "birmingham", "edinburgh"] },
+        "germany": { label: "Germany", cities: ["berlin", "frankfurt", "munich", "hamburg"] },
+        "france": { label: "France", cities: ["paris", "lyon", "marseille", "toulouse"] },
+        "italy": { label: "Italy", cities: ["milan", "rome", "naples", "turin"] },
+        "spain": { label: "Spain", cities: ["madrid", "barcelona", "valencia", "seville"] },
+        "netherlands": { label: "Netherlands", cities: ["amsterdam", "rotterdam", "the-hague"] },
+        "sweden": { label: "Sweden", cities: ["stockholm", "gothenburg", "malmö"] },
+        "poland": { label: "Poland", cities: ["warsaw", "krakow", "gdansk"] },
+        "romania": { label: "Romania", cities: ["bucharest", "cluj-napoca"] },
+        "turkey": { label: "Türkiye", cities: ["istanbul", "ankara", "izmir"] }
+      }
+    },
+    "asia-pacific": {
+      label: "Asia Pacific",
+      countries: {
+        "japan": { label: "Japan", cities: ["tokyo", "osaka", "nagoya", "fukuoka"] },
+        "australia": { label: "Australia", cities: ["sydney", "melbourne", "brisbane", "perth"] },
+        "south-korea": { label: "South Korea", cities: ["seoul", "busan", "incheon"] },
+        "singapore": { label: "Singapore", cities: ["singapore"] },
+        "china": { label: "China", cities: ["shanghai", "beijing", "shenzhen", "guangzhou", "chengdu"] },
+        "india": { label: "India", cities: ["mumbai", "delhi", "bangalore", "hyderabad", "chennai"] },
+        "thailand": { label: "Thailand", cities: ["bangkok", "chiang-mai"] },
+        "malaysia": { label: "Malaysia", cities: ["kuala-lumpur", "johor-bahru"] },
+        "indonesia": { label: "Indonesia", cities: ["jakarta", "surabaya"] }
+      }
+    },
+    "latin-america": {
+      label: "Latin America", 
+      countries: {
+        "brazil": { label: "Brazil", cities: ["sao-paulo", "rio-de-janeiro", "brasilia", "salvador"] },
+        "mexico": { label: "Mexico", cities: ["mexico-city", "guadalajara", "monterrey"] },
+        "argentina": { label: "Argentina", cities: ["buenos-aires", "cordoba", "rosario"] },
+        "chile": { label: "Chile", cities: ["santiago", "valparaiso"] },
+        "colombia": { label: "Colombia", cities: ["bogota", "medellin", "cartagena"] },
+        "peru": { label: "Peru", cities: ["lima", "arequipa"] }
+      }
+    },
+    "middle-east-africa": {
+      label: "Middle East & Africa",
+      countries: {
+        "uae": { label: "United Arab Emirates", cities: ["dubai", "abu-dhabi"] },
+        "saudi-arabia": { label: "Saudi Arabia", cities: ["riyadh", "jeddah", "dammam"] },
+        "qatar": { label: "Qatar", cities: ["doha"] },
+        "south-africa": { label: "South Africa", cities: ["johannesburg", "cape-town", "durban"] },
+        "nigeria": { label: "Nigeria", cities: ["lagos", "abuja"] },
+        "kenya": { label: "Kenya", cities: ["nairobi", "mombasa"] },
+        "egypt": { label: "Egypt", cities: ["cairo", "alexandria"] },
+        "israel": { label: "Israel", cities: ["tel-aviv", "jerusalem"] }
+      }
+    }
+  };
+
   const regions = [
     { value: "all", label: "All Regions" },
-    { value: "north-america", label: "North America" },
-    { value: "europe", label: "Europe" },
-    { value: "asia-pacific", label: "Asia Pacific" },
-    { value: "middle-east", label: "Middle East" },
-    { value: "latin-america", label: "Latin America" },
-    { value: "africa", label: "Africa" },
-    { value: "global", label: "Global" }
+    ...Object.entries(geographyData).map(([key, data]) => ({ value: key, label: data.label }))
   ];
+
+  const getCountriesForRegion = (regionValue: string) => {
+    if (regionValue === "all") return [{ value: "all", label: "All Countries" }];
+    const regionData = geographyData[regionValue as keyof typeof geographyData];
+    if (!regionData) return [{ value: "all", label: "All Countries" }];
+    
+    return [
+      { value: "all", label: "All Countries" },
+      ...Object.entries(regionData.countries).map(([key, country]) => ({ value: key, label: country.label }))
+    ];
+  };
+
+  const getCitiesForCountry = (regionValue: string, countryValue: string) => {
+    if (regionValue === "all" || countryValue === "all") return [{ value: "all", label: "All Cities" }];
+    const regionData = geographyData[regionValue as keyof typeof geographyData];
+    if (!regionData) return [{ value: "all", label: "All Cities" }];
+    
+    const countryData = regionData.countries[countryValue];
+    if (!countryData) return [{ value: "all", label: "All Cities" }];
+    
+    return [
+      { value: "all", label: "All Cities" },
+      ...countryData.cities.map(city => ({ 
+        value: city, 
+        label: city.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+      }))
+    ];
+  };
 
   const sectors = [
     { value: "all", label: "All Sectors" },
@@ -30,20 +119,50 @@ const MarketTrends = () => {
     { value: "mixed-use", label: "Mixed-Use" }
   ];
 
-  const subSectors = [
-    { value: "all", label: "All Sub-Sectors" },
-    { value: "office", label: "Office" },
-    { value: "industrial", label: "Industrial" },
-    { value: "retail", label: "Retail" },
-    { value: "hospitality", label: "Hospitality" },
-    { value: "healthcare", label: "Healthcare" },
-    { value: "multifamily", label: "Multifamily" },
-    { value: "single-family", label: "Single Family" },
-    { value: "student-housing", label: "Student Housing" },
-    { value: "senior-housing", label: "Senior Housing" },
-    { value: "mixed-use-development", label: "Mixed-Use Development" },
-    { value: "live-work", label: "Live-Work" }
-  ];
+  const getSubSectorsForSector = (sectorValue: string) => {
+    const allSubSectors = [
+      { value: "all", label: "All Sub-Sectors" },
+      { value: "office", label: "Office", parent: "commercial" },
+      { value: "industrial", label: "Industrial", parent: "commercial" },
+      { value: "retail", label: "Retail", parent: "commercial" },
+      { value: "hospitality", label: "Hospitality", parent: "commercial" },
+      { value: "healthcare", label: "Healthcare", parent: "commercial" },
+      { value: "multifamily", label: "Multifamily", parent: "residential" },
+      { value: "single-family", label: "Single Family", parent: "residential" },
+      { value: "student-housing", label: "Student Housing", parent: "residential" },
+      { value: "senior-housing", label: "Senior Housing", parent: "residential" },
+      { value: "mixed-use-development", label: "Mixed-Use Development", parent: "mixed-use" },
+      { value: "live-work", label: "Live-Work", parent: "mixed-use" }
+    ];
+
+    if (sectorValue === "all") return allSubSectors;
+    
+    return [
+      { value: "all", label: "All Sub-Sectors" },
+      ...allSubSectors.filter(sub => sub.parent === sectorValue)
+    ];
+  };
+
+  // Handle cascading filter changes
+  const handleRegionChange = (value: string) => {
+    setSelectedRegion(value);
+    setSelectedCountry("all");
+    setSelectedCity("all");
+  };
+
+  const handleCountryChange = (value: string) => {
+    setSelectedCountry(value);
+    setSelectedCity("all");
+  };
+
+  const handleSectorChange = (value: string) => {
+    setSelectorSector(value);
+    setSelectedSubSector("all");
+  };
+
+  const currentCountries = getCountriesForRegion(selectedRegion);
+  const currentCities = getCitiesForCountry(selectedRegion, selectedCountry);
+  const currentSubSectors = getSubSectorsForSector(selectedSector);
 
   const marketMetrics = [
     {
@@ -331,57 +450,143 @@ const MarketTrends = () => {
         {/* Filter Controls */}
         <section className="py-8 bg-muted/30 border-b">
           <div className="container mx-auto px-6">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-6">
               <Filter className="w-5 h-5 text-primary" />
-              <h3 className="font-primary text-lg font-semibold text-foreground">Market Filters</h3>
+              <h3 className="font-primary text-lg font-semibold text-foreground">Market Intelligence Filters</h3>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Region</label>
-                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select region" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {regions.map((region) => (
-                      <SelectItem key={region.value} value={region.value}>
-                        {region.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Sector</label>
-                <Select value={selectedSector} onValueChange={setSelectorSector}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select sector" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sectors.map((sector) => (
-                      <SelectItem key={sector.value} value={sector.value}>
-                        {sector.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Sub-Sector</label>
-                <Select value={selectedSubSector} onValueChange={setSelectedSubSector}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select sub-sector" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subSectors.map((subSector) => (
-                      <SelectItem key={subSector.value} value={subSector.value}>
-                        {subSector.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            
+            {/* Geography Filters */}
+            <div className="mb-6">
+              <h4 className="font-accent font-medium text-foreground mb-3 flex items-center gap-2">
+                <Globe className="w-4 h-4 text-primary" />
+                Geographic Scope
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Region</label>
+                  <Select value={selectedRegion} onValueChange={handleRegionChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select region" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {regions.map((region) => (
+                        <SelectItem key={region.value} value={region.value}>
+                          {region.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Country</label>
+                  <Select value={selectedCountry} onValueChange={handleCountryChange} disabled={selectedRegion === "all"}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentCountries.map((country) => (
+                        <SelectItem key={country.value} value={country.value}>
+                          {country.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">City</label>
+                  <Select value={selectedCity} onValueChange={setSelectedCity} disabled={selectedCountry === "all"}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentCities.map((city) => (
+                        <SelectItem key={city.value} value={city.value}>
+                          {city.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
+
+            {/* Sector Filters */}
+            <div>
+              <h4 className="font-accent font-medium text-foreground mb-3 flex items-center gap-2">
+                <Building className="w-4 h-4 text-primary" />
+                Asset Classification
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Sector</label>
+                  <Select value={selectedSector} onValueChange={handleSectorChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select sector" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sectors.map((sector) => (
+                        <SelectItem key={sector.value} value={sector.value}>
+                          {sector.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Sub-Sector</label>
+                  <Select value={selectedSubSector} onValueChange={setSelectedSubSector} disabled={selectedSector === "all"}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select sub-sector" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentSubSectors.map((subSector) => (
+                        <SelectItem key={subSector.value} value={subSector.value}>
+                          {subSector.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Filters Display */}
+            {(selectedRegion !== "all" || selectedSector !== "all") && (
+              <div className="mt-6 pt-4 border-t border-border/50">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-medium text-foreground">Active Filters:</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedRegion !== "all" && (
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <Globe className="w-3 h-3" />
+                      {regions.find(r => r.value === selectedRegion)?.label}
+                    </Badge>
+                  )}
+                  {selectedCountry !== "all" && (
+                    <Badge variant="secondary">
+                      {currentCountries.find(c => c.value === selectedCountry)?.label}
+                    </Badge>
+                  )}
+                  {selectedCity !== "all" && (
+                    <Badge variant="secondary">
+                      {currentCities.find(c => c.value === selectedCity)?.label}
+                    </Badge>
+                  )}
+                  {selectedSector !== "all" && (
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <Building className="w-3 h-3" />
+                      {sectors.find(s => s.value === selectedSector)?.label}
+                    </Badge>
+                  )}
+                  {selectedSubSector !== "all" && (
+                    <Badge variant="secondary">
+                      {currentSubSectors.find(s => s.value === selectedSubSector)?.label}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
