@@ -69,6 +69,11 @@ const KeyDeals = () => {
     return `${(rate * 100).toFixed(1)}%`;
   };
 
+  const formatLocation = (city: string | null, state_province: string | null): string => {
+    const parts = [city, state_province].filter(part => part && part.trim() !== '');
+    return parts.length > 0 ? parts.join(', ') : 'Location TBD';
+  };
+
   useEffect(() => {
     const fetchDeals = async () => {
       try {
@@ -222,7 +227,7 @@ const KeyDeals = () => {
                 ))
               ) : featuredDeals.length > 0 ? (
                 featuredDeals.map((deal) => {
-                  const location = `${deal.city}, ${deal.state_province}`;
+                  const location = formatLocation(deal.city, deal.state_province);
                   const value = formatCurrency(deal.deal_value);
                   const date = formatDate(deal.closing_date || deal.announcement_date);
                   
@@ -377,7 +382,7 @@ const KeyDeals = () => {
                   ))
                 ) : recentDeals.length > 0 ? (
                   recentDeals.map((transaction) => {
-                    const location = `${transaction.city}, ${transaction.state_province}`;
+                    const location = formatLocation(transaction.city, transaction.state_province);
                     const price = formatCurrency(transaction.deal_value);
                     const date = formatDate(transaction.closing_date || transaction.announcement_date);
                     
@@ -447,7 +452,7 @@ const KeyDeals = () => {
                 ))
               ) : pipelineDeals.length > 0 ? (
                 pipelineDeals.map((deal) => {
-                  const location = `${deal.city}, ${deal.state_province}`;
+                  const location = formatLocation(deal.city, deal.state_province);
                   const estimate = formatCurrency(deal.deal_value);
                   const timeline = formatDate(deal.announcement_date) || 'Q1 2025';
                   
