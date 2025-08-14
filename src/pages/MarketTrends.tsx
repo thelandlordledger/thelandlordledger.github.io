@@ -32,7 +32,8 @@ const MarketTrends = () => {
     getCountriesForRegion: getDbCountriesForRegion,
     getCitiesForCountry: getDbCitiesForCountry,
     getSubSectorsForSector: getDbSubSectorsForSector,
-    getMetricsByCategory
+    getMetricsByCategory,
+    getBestMetricsForCategory
   } = useMarketTrends(
     selectedRegion !== "all" ? selectedRegion : undefined,
     selectedCountry !== "all" ? selectedCountry : undefined,
@@ -126,7 +127,10 @@ const MarketTrends = () => {
 
   const regions = [
     { value: "all", label: "All Regions" },
-    ...Object.entries(geographyData).map(([key, data]) => ({ value: key, label: data.label }))
+    { value: "americas", label: "Americas" },
+    { value: "europe", label: "Europe" },
+    { value: "asia-pacific", label: "Asia Pacific" },
+    { value: "middle-east-africa", label: "Middle East & Africa" }
   ];
 
   const getCountriesForRegion = (regionValue: string) => {
@@ -161,7 +165,8 @@ const MarketTrends = () => {
     { value: "all", label: "All Sectors" },
     { value: "commercial", label: "Commercial" },
     { value: "residential", label: "Residential" },
-    { value: "mixed-use", label: "Mixed-Use" }
+    { value: "mixed-use", label: "Mixed-Use" },
+    { value: "industrial", label: "Industrial" }
   ];
 
   const getSubSectorsForSector = (sectorValue: string) => {
@@ -823,8 +828,8 @@ const MarketTrends = () => {
                   <Card className="p-4 bg-background border col-span-4">
                     <p className="text-destructive">Error loading market data: {error}</p>
                   </Card>
-                ) : getMetricsByCategory('market_activity').length > 0 ? (
-                  getMetricsByCategory('market_activity').map((metric, index) => {
+                ) : getBestMetricsForCategory('market_activity', 4).length > 0 ? (
+                  getBestMetricsForCategory('market_activity', 4).map((metric, index) => {
                   const isPositive = metric.change_direction === "up";
                   const changePercentage = metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : 'N/A';
                   const sparklineData = metric.sparkline_data || [1, 2, 3, 4, 5, 6, 7];
@@ -907,7 +912,57 @@ const MarketTrends = () => {
             <div className="mb-8">
               <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Investment Metrics</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
+                {loading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <Card key={index} className="p-4 bg-background border">
+                      <div className="animate-pulse">
+                        <div className="h-4 bg-muted rounded mb-3"></div>
+                        <div className="h-6 bg-muted rounded mb-2"></div>
+                        <div className="h-3 bg-muted rounded"></div>
+                      </div>
+                    </Card>
+                  ))
+                ) : getBestMetricsForCategory('investment_metrics', 4).length > 0 ? (
+                  getBestMetricsForCategory('investment_metrics', 4).map((metric, index) => {
+                  const isPositive = metric.change_direction === "up";
+                  const changePercentage = metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : 'N/A';
+                  const sparklineData = metric.sparkline_data || [1, 2, 3, 4, 5, 6, 7];
+                  
+                  return (
+                    <Card key={metric.id} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <DollarSign className="w-4 h-4 text-foreground" />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          <span>{changePercentage}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="h-4 mb-3">
+                        <svg className="w-full h-full" viewBox="0 0 100 16">
+                          <polyline
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                            points={Array.isArray(sparklineData) ? sparklineData.map((value, i) => 
+                              `${(i / (sparklineData.length - 1)) * 100},${16 - (value / Math.max(...sparklineData)) * 14}`
+                            ).join(' ') : '0,8 100,8'}
+                          />
+                        </svg>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-xl font-bold text-foreground">{metric.current_value}</h4>
+                        <h5 className="text-sm font-medium text-foreground">{metric.metric_name}</h5>
+                        <p className="text-xs text-muted-foreground">{metric.metric_family}</p>
+                      </div>
+                    </Card>
+                  );
+                })) : (
+                  [
                   coreKPIFamilies["valuation-returns"][1], // Cap Rate
                   coreKPIFamilies["occupancy-demand"][0], // Vacancy Rate
                   coreKPIFamilies["occupancy-demand"][1], // Net Absorption
@@ -948,7 +1003,8 @@ const MarketTrends = () => {
                       </div>
                     </Card>
                   );
-                })}
+                })
+              )}
               </div>
             </div>
 

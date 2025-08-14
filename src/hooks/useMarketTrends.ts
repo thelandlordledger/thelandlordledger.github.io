@@ -193,7 +193,7 @@ export const useMarketTrends = (
           subSectorId = subSector?.id || null;
         }
 
-        // Fetch metrics with filters
+        // Fetch metrics with filters - ONLY show data that matches ALL selected filters
         let metricsQuery = supabase.from('snapshot_market_metrics').select('*');
         
         if (regionId) {
@@ -210,6 +210,11 @@ export const useMarketTrends = (
         }
         if (subSectorId) {
           metricsQuery = metricsQuery.eq('sub_sector_id', subSectorId);
+        }
+
+        // If no filters are selected, limit to prevent showing all data
+        if (!regionId && !countryId && !cityId && !sectorId && !subSectorId) {
+          metricsQuery = metricsQuery.limit(8); // Show limited global data
         }
 
         // Fetch sector intelligence with filters
@@ -316,7 +321,41 @@ export const useMarketTrends = (
 
   // Organize metrics by category
   const getMetricsByCategory = (category: string) => {
-    return metrics.filter(m => m.metric_category === category);
+    const categoryMetrics = metrics.filter(m => m.metric_category === category);
+    
+    // Group by metric_name to avoid duplicates, pick the most relevant one
+    const uniqueMetrics = categoryMetrics.reduce((acc, metric) => {
+      const existing = acc.find(m => m.metric_name === metric.metric_name);
+      if (!existing) {
+        acc.push(metric);
+      } else {
+        // Replace with more specific or more recent data
+        const existingSpecificity = (existing.region_id ? 1 : 0) + (existing.sector_id ? 1 : 0) + (existing.country_id ? 1 : 0);
+        const currentSpecificity = (metric.region_id ? 1 : 0) + (metric.sector_id ? 1 : 0) + (metric.country_id ? 1 : 0);
+        
+        if (currentSpecificity > existingSpecificity) {
+          const index = acc.findIndex(m => m.metric_name === metric.metric_name);
+          acc[index] = metric;
+        }
+      }
+      return acc;
+    }, [] as MarketMetric[]);
+    
+    return uniqueMetrics;
+  };
+
+  // Get the best metrics for a category (prioritizing most specific filters)
+  const getBestMetricsForCategory = (category: string, limit: number = 4) => {
+    const categoryMetrics = getMetricsByCategory(category);
+    
+    // Sort by specificity (more specific filters first) and limit results
+    return categoryMetrics
+      .sort((a, b) => {
+        const aSpecificity = (a.region_id ? 1 : 0) + (a.country_id ? 1 : 0) + (a.city_id ? 1 : 0) + (a.sector_id ? 1 : 0) + (a.sub_sector_id ? 1 : 0);
+        const bSpecificity = (b.region_id ? 1 : 0) + (b.country_id ? 1 : 0) + (b.city_id ? 1 : 0) + (b.sector_id ? 1 : 0) + (b.sub_sector_id ? 1 : 0);
+        return bSpecificity - aSpecificity;
+      })
+      .slice(0, limit);
   };
 
   return {
@@ -334,6 +373,7 @@ export const useMarketTrends = (
     getCountriesForRegion,
     getCitiesForCountry,
     getSubSectorsForSector,
-    getMetricsByCategory
+    getMetricsByCategory,
+    getBestMetricsForCategory
   };
 };
