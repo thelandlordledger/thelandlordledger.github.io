@@ -1,0 +1,72 @@
+-- Add comprehensive sector intelligence for major market combinations (corrected)
+INSERT INTO snapshot_sector_intelligence (title, content, metrics, sector_id, region_id, country_id, published) VALUES
+
+('European Commercial Market Recovery', 
+'The European commercial market is experiencing a bifurcated recovery, with premium Grade A properties in central locations commanding significant premiums while secondary stock faces persistent headwinds. London leads the recovery with strong demand from financial services and tech companies, driving rents up 8.2% year-over-year. ESG compliance has become a key differentiator, with energy-efficient buildings achieving 15-20% rental premiums.',
+'{"occupancy_rate": "87.2%", "rent_growth": "8.2%", "esg_premium": "15-20%", "completion_pipeline": "2.4M sq ft"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'commercial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'europe'),
+(SELECT id FROM snapshot_countries WHERE slug = 'united-kingdom'), true),
+
+('Asia-Pacific Residential Boom', 
+'Residential markets across APAC continue to show resilience despite global economic headwinds. Sydney leads with an 8.1% price appreciation, driven by supply constraints and strong migration flows. The luxury segment is particularly robust, with properties above AUD $2M seeing 12% growth. However, affordability concerns are mounting with median house prices reaching AUD $1.35M.',
+'{"price_growth": "8.1%", "luxury_premium": "12%", "median_price": "AUD $1.35M", "days_on_market": "28 days"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'residential'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'asia-pacific'),
+(SELECT id FROM snapshot_countries WHERE slug = 'australia'), true),
+
+('Middle East Mixed-Use Revolution', 
+'The GCC region is witnessing unprecedented mixed-use development activity, with Dubai leading a AED 55 billion investment wave. Projects like Dubai Creek Harbour are redefining urban living, integrating residential, retail, hospitality, and cultural spaces. Hotel occupancy has recovered to 78.5%, while mixed-use development values have surged 11.2% as investors seek diversified income streams.',
+'{"development_value": "AED 12,500/sq ft", "hotel_occupancy": "78.5%", "investment_volume": "AED 55B", "occupancy_growth": "22.3%"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'mixed-use'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'middle-east'),
+(SELECT id FROM snapshot_countries WHERE slug = 'uae'), true),
+
+('US Industrial E-commerce Surge', 
+'The North American industrial sector continues its rapid expansion, driven by e-commerce penetration reaching 68%. Los Angeles remains a critical hub with warehouse rents climbing 12.8% to $18.50/sq ft annually. Last-mile logistics facilities are commanding premium valuations, with absorption rates up 25.4% as retailers prioritize faster delivery capabilities.',
+'{"rent_growth": "12.8%", "current_rent": "$18.50/sq ft", "absorption": "8.2M sq ft", "ecommerce_penetration": "68%"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'industrial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'north-america'),
+(SELECT id FROM snapshot_countries WHERE slug = 'usa'), true),
+
+('Global Commercial Transformation', 
+'Commercial real estate is undergoing fundamental transformation as flexible workspace and omnichannel strategies reshape space requirements. Premium commercial buildings with strong ESG credentials are commanding significant premiums, while older stock faces persistent headwinds. Flight-to-quality trends are evident across major markets.',
+'{"esg_premium": "15-20%", "occupancy_improvement": "12.4%", "flight_to_quality": "strong", "flexible_workspace": "growing"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'commercial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'europe'),
+(SELECT id FROM snapshot_countries WHERE slug = 'france'), true),
+
+('Hong Kong Commercial Market Correction', 
+'Hong Kong commercial market faces structural challenges with rents declining 3.2% as companies reassess space needs and regional strategies. However, premium buildings with strong ESG credentials and flexible lease terms are maintaining resilience, suggesting a flight-to-quality trend. Take-up has fallen 18.5% but quality assets remain in demand.',
+'{"rent_decline": "-3.2%", "takeup_decline": "-18.5%", "vacancy_trend": "increasing", "flight_to_quality": "evident"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'commercial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'asia-pacific'),
+(SELECT id FROM snapshot_countries WHERE slug = 'hong-kong'), true),
+
+('GCC Mixed-Use Development Boom', 
+'The Gulf region is experiencing remarkable mixed-use development activity with projects integrating hospitality, residential, retail, and commercial spaces. Dubai leads with luxury developments achieving strong occupancy rates and premium valuations. New mixed-use developments are commanding premium rates with strong investor interest.',
+'{"occupancy_rate": "78.5%", "growth_rate": "22.3%", "segment": "luxury", "driver": "integrated_development"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'mixed-use'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'middle-east'),
+(SELECT id FROM snapshot_countries WHERE slug = 'uae'), true),
+
+('Global Industrial Real Estate Expansion', 
+'The global industrial real estate sector continues robust expansion with North American markets leading growth. Warehouse and logistics facilities have seen unprecedented demand driven by e-commerce fulfillment needs. Supply chain reshoring and near-shoring trends are creating new industrial hubs, particularly in secondary markets.',
+'{"rent_growth": "12.8%", "absorption": "25.4%", "key_driver": "e-commerce", "trend": "supply_chain_reshoring"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'industrial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'north-america'),
+NULL, true),
+
+('European Sustainability Revolution', 
+'ESG considerations are driving a significant transformation in European real estate markets. Buildings with top-tier sustainability certifications are achieving 15-20% premiums across commercial sectors. Investors are increasingly focused on carbon-neutral portfolios, with €24B+ being allocated to sustainable real estate upgrades.',
+'{"esg_premium": "15-20%", "certification_demand": "high", "investment_volume": "€24B+", "focus": "carbon_neutral"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'commercial'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'europe'),
+NULL, true),
+
+('Asia-Pacific Integrated Development', 
+'Major Asia-Pacific cities are embracing integrated mixed-use development models, with Singapore and Sydney leading transit-oriented development initiatives. Mixed-use projects are becoming the preferred development format, offering diversified revenue streams and meeting evolving urban lifestyle demands.',
+'{"development_model": "mixed-use", "government_support": "strong", "investment_flow": "institutional", "focus": "transit_oriented"}',
+(SELECT id FROM snapshot_sectors WHERE slug = 'mixed-use'),
+(SELECT id FROM snapshot_geographic_regions WHERE slug = 'asia-pacific'),
+NULL, true);
