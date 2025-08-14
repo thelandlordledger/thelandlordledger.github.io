@@ -128,6 +128,7 @@ export type Database = {
           deal_status: string
           deal_value: number | null
           deal_value_formatted: string | null
+          description: string | null
           featured_deal: boolean | null
           full_address: string | null
           id: string
@@ -180,6 +181,7 @@ export type Database = {
           deal_status?: string
           deal_value?: number | null
           deal_value_formatted?: string | null
+          description?: string | null
           featured_deal?: boolean | null
           full_address?: string | null
           id?: string
@@ -232,6 +234,7 @@ export type Database = {
           deal_status?: string
           deal_value?: number | null
           deal_value_formatted?: string | null
+          description?: string | null
           featured_deal?: boolean | null
           full_address?: string | null
           id?: string

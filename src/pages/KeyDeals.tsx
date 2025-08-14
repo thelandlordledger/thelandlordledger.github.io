@@ -16,6 +16,7 @@ interface Deal {
   property_type: string;
   city: string;
   state_province: string;
+  description?: string;
   buyer?: string;
   seller?: string;
   announcement_date?: string;
@@ -278,7 +279,7 @@ const KeyDeals = () => {
                           </div>
                           
                           <p className="font-secondary text-muted-foreground mb-6 leading-relaxed line-clamp-3 lg:line-clamp-none">
-                            {deal.property_name && `Premium ${deal.property_type.toLowerCase()} property featuring strategic location and institutional-quality assets.`}
+                            {deal.description || `Premium ${deal.property_type.toLowerCase()} property featuring strategic location and institutional-quality assets.`}
                           </p>
                           
                           {/* Metrics Grid */}
