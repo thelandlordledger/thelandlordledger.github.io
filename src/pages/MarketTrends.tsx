@@ -1146,7 +1146,8 @@ const MarketTrends = () => {
                     {person.trend}
                   </p>
                 </Card>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -1157,62 +1158,113 @@ const MarketTrends = () => {
             <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Trending Projects</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  name: "Hudson Yards Phase III",
-                  location: "New York, NY",
-                  value: "$4.2B",
-                  status: "Under Construction",
-                  completion: "Q3 2026",
-                  type: "Mixed-Use"
-                },
-                {
-                  name: "Amazon HQ2 Expansion",
-                  location: "Arlington, VA", 
-                  value: "$2.5B",
-                  status: "Phase 1 Complete",
-                  completion: "Q4 2025",
-                  type: "Corporate Campus"
-                },
-                {
-                  name: "Canary Wharf Life Sciences",
-                  location: "London, UK",
-                  value: "£1.8B",
-                  status: "Pre-Development", 
-                  completion: "Q2 2027",
-                  type: "Life Sciences"
-                },
-                {
-                  name: "Marina Bay Financial",
-                  location: "Singapore",
-                  value: "S$3.2B",
-                  status: "Under Construction",
-                  completion: "Q1 2026", 
-                  type: "Financial Hub"
-                }
-              ].map((project, index) => (
-                <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="p-2 rounded-lg bg-muted/50">
-                      <Building className="w-4 h-4 text-foreground" />
+              {loading ? (
+                Array.from({ length: 4 }).map((_, index) => (
+                  <Card key={index} className="p-4 bg-background border">
+                    <div className="animate-pulse">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-muted"></div>
+                        <div className="w-16 h-4 bg-muted rounded"></div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-muted rounded"></div>
+                        <div className="h-3 bg-muted rounded"></div>
+                        <div className="h-3 bg-muted rounded w-3/4"></div>
+                      </div>
                     </div>
-                    <Badge variant="outline" className="text-xs">
-                      {project.status}
-                    </Badge>
-                  </div>
-                  
-                  <div className="space-y-1 mb-3">
-                    <h4 className="text-sm font-semibold text-foreground">{project.name}</h4>
-                    <p className="text-xs text-muted-foreground">{project.location}</p>
-                    <p className="text-xs font-medium text-primary">{project.value}</p>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{project.type}</span>
-                    <span>{project.completion}</span>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))
+              ) : trendingProjects.length > 0 ? (
+                trendingProjects.map((project, index) => {
+                  const changePercentage = project.change_percentage ? `${project.change_percentage > 0 ? '+' : ''}${project.change_percentage}%` : '';
+                  return (
+                    <Card key={project.id} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <Building className="w-4 h-4 text-foreground" />
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {project.project_status}
+                        </Badge>
+                      </div>
+                      
+                      <div className="space-y-1 mb-3">
+                        <h4 className="text-sm font-semibold text-foreground">{project.name}</h4>
+                        <p className="text-xs text-muted-foreground">{project.location}</p>
+                        <p className="text-xs font-medium text-primary">{project.project_value}</p>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>Development</span>
+                        {changePercentage && <span>{changePercentage}</span>}
+                      </div>
+                      
+                      {project.description && (
+                        <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                          {project.description}
+                        </p>
+                      )}
+                    </Card>
+                  );
+                })
+              ) : (
+                [
+                  {
+                    name: "Hudson Yards Phase III",
+                    location: "New York, NY",
+                    value: "$4.2B",
+                    status: "Under Construction",
+                    completion: "Q3 2026",
+                    type: "Mixed-Use"
+                  },
+                  {
+                    name: "Amazon HQ2 Expansion",
+                    location: "Arlington, VA", 
+                    value: "$2.5B",
+                    status: "Phase 1 Complete",
+                    completion: "Q4 2025",
+                    type: "Corporate Campus"
+                  },
+                  {
+                    name: "Canary Wharf Life Sciences",
+                    location: "London, UK",
+                    value: "£1.8B",
+                    status: "Pre-Development", 
+                    completion: "Q2 2027",
+                    type: "Life Sciences"
+                  },
+                  {
+                    name: "Marina Bay Financial",
+                    location: "Singapore",
+                    value: "S$3.2B",
+                    status: "Under Construction",
+                    completion: "Q1 2026", 
+                    type: "Financial Hub"
+                  }
+                ].map((project, index) => (
+                  <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2 rounded-lg bg-muted/50">
+                        <Building className="w-4 h-4 text-foreground" />
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {project.status}
+                      </Badge>
+                    </div>
+                    
+                    <div className="space-y-1 mb-3">
+                      <h4 className="text-sm font-semibold text-foreground">{project.name}</h4>
+                      <p className="text-xs text-muted-foreground">{project.location}</p>
+                      <p className="text-xs font-medium text-primary">{project.value}</p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{project.type}</span>
+                      <span>{project.completion}</span>
+                    </div>
+                  </Card>
+                ))
+              )}
             </div>
           </div>
         </section>
