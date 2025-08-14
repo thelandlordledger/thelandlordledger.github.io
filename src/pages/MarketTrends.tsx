@@ -639,45 +639,23 @@ const MarketTrends = () => {
               )}
             </div>
 
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <Filter className="w-4 h-4 text-primary" />
-                <h3 className="font-accent font-medium text-foreground">Quick Data Selector</h3>
-              </div>
-              <div className="flex items-center gap-4">
-                {/* Time Window Selector */}
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <Select value={selectedTimeWindow} onValueChange={setSelectedTimeWindow}>
-                    <SelectTrigger className="h-8 w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timeWindows.map((window) => (
-                        <SelectItem key={window.value} value={window.value}>
-                          {window.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                {(selectedRegion !== "all" || selectedSector !== "all") && (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => {
-                      setSelectedRegion("all");
-                      setSelectedCountry("all"); 
-                      setSelectedCity("all");
-                      setSelectorSector("all");
-                      setSelectedSubSector("all");
-                    }}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Clear All
-                  </Button>
-                )}
-              </div>
+            <div className="flex items-center justify-end mb-4">
+              {(selectedRegion !== "all" || selectedSector !== "all") && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setSelectedRegion("all");
+                    setSelectedCountry("all"); 
+                    setSelectedCity("all");
+                    setSelectorSector("all");
+                    setSelectedSubSector("all");
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Clear All
+                </Button>
+              )}
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -798,20 +776,12 @@ const MarketTrends = () => {
         </section>
 
         {/* Market Metrics Dashboard */}
-        <section className="py-20 bg-background">
+        <section className="py-8 bg-background">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="font-primary text-3xl font-semibold text-foreground mb-3">
-                Market Metrics
-              </h2>
-              <p className="font-secondary text-base text-muted-foreground max-w-xl mx-auto">
-                Key performance indicators international real estate markets
-              </p>
-            </div>
 
             {/* Market Activity Section */}
-            <div className="mb-12">
-              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Market Activity</h3>
+            <div className="mb-8">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Market Activity</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
                   coreKPIFamilies["market-activity"][0], // Transaction Volume
@@ -859,8 +829,8 @@ const MarketTrends = () => {
             </div>
 
             {/* Investment Metrics Section */}
-            <div className="mb-12">
-              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Investment Metrics</h3>
+            <div className="mb-8">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Investment Metrics</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
                   coreKPIFamilies["valuation-returns"][1], // Cap Rate
@@ -908,8 +878,8 @@ const MarketTrends = () => {
             </div>
 
             {/* Financing Metrics Section */}
-            <div className="mb-12">
-              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Financing Metrics</h3>
+            <div className="mb-8">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Financing Metrics</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
                   coreKPIFamilies["financing-cost"][0], // Loan Rate
@@ -997,7 +967,7 @@ const MarketTrends = () => {
 
 
         {/* Trending People */}
-        <section className="py-20 bg-muted/30">
+        <section className="py-12 bg-muted/30">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
@@ -1102,7 +1072,7 @@ const MarketTrends = () => {
         </section>
 
         {/* Trending Projects */}
-        <section className="py-20 bg-background">
+        <section className="py-12 bg-background">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
