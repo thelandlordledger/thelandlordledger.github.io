@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -328,6 +328,550 @@ export type Database = {
           venue?: string | null
         }
         Relationships: []
+      }
+      snapshot_cities: {
+        Row: {
+          country_id: string
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          country_id: string
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          country_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_cities_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_countries: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          region_id: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          region_id: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          region_id?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_countries_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_geographic_regions: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      snapshot_market_comparisons: {
+        Row: {
+          comparison_data: Json
+          comparison_type: string
+          country_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          published: boolean | null
+          region_id: string | null
+          sector_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          comparison_data: Json
+          comparison_type: string
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          comparison_data?: Json
+          comparison_type?: string
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_market_comparisons_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_comparisons_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_comparisons_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_market_metrics: {
+        Row: {
+          change_direction: string | null
+          change_percentage: number | null
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          current_value: string
+          data_date: string
+          id: string
+          metric_category: string
+          metric_family: string
+          metric_name: string
+          region_id: string | null
+          sector_id: string | null
+          sparkline_data: Json | null
+          sub_sector_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          change_direction?: string | null
+          change_percentage?: number | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          current_value: string
+          data_date?: string
+          id?: string
+          metric_category: string
+          metric_family: string
+          metric_name: string
+          region_id?: string | null
+          sector_id?: string | null
+          sparkline_data?: Json | null
+          sub_sector_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          change_direction?: string | null
+          change_percentage?: number | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          current_value?: string
+          data_date?: string
+          id?: string
+          metric_category?: string
+          metric_family?: string
+          metric_name?: string
+          region_id?: string | null
+          sector_id?: string | null
+          sparkline_data?: Json | null
+          sub_sector_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_market_metrics_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_metrics_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_metrics_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_metrics_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_market_metrics_sub_sector_id_fkey"
+            columns: ["sub_sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sub_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_sector_intelligence: {
+        Row: {
+          content: string
+          country_id: string | null
+          created_at: string
+          id: string
+          metrics: Json | null
+          published: boolean | null
+          region_id: string | null
+          sector_id: string
+          sub_sector_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          country_id?: string | null
+          created_at?: string
+          id?: string
+          metrics?: Json | null
+          published?: boolean | null
+          region_id?: string | null
+          sector_id: string
+          sub_sector_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          country_id?: string | null
+          created_at?: string
+          id?: string
+          metrics?: Json | null
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string
+          sub_sector_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_sector_intelligence_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_sector_intelligence_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_sector_intelligence_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_sector_intelligence_sub_sector_id_fkey"
+            columns: ["sub_sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sub_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_sectors: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      snapshot_sub_sectors: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          sector_id: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          sector_id: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          sector_id?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_sub_sectors_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_trending_people: {
+        Row: {
+          change_percentage: number | null
+          company: string
+          country_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          position: string
+          published: boolean | null
+          region_id: string | null
+          sector_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          change_percentage?: number | null
+          company: string
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          position: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          change_percentage?: number | null
+          company?: string
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          position?: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_trending_people_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_people_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_people_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snapshot_trending_projects: {
+        Row: {
+          change_percentage: number | null
+          city_id: string | null
+          country_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          location: string
+          name: string
+          project_status: string
+          project_value: string
+          published: boolean | null
+          region_id: string | null
+          sector_id: string | null
+          sub_sector_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          change_percentage?: number | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location: string
+          name: string
+          project_status: string
+          project_value: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          sub_sector_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          change_percentage?: number | null
+          city_id?: string | null
+          country_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string
+          name?: string
+          project_status?: string
+          project_value?: string
+          published?: boolean | null
+          region_id?: string | null
+          sector_id?: string | null
+          sub_sector_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snapshot_trending_projects_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_projects_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_projects_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_geographic_regions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_projects_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sectors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snapshot_trending_projects_sub_sector_id_fkey"
+            columns: ["sub_sector_id"]
+            isOneToOne: false
+            referencedRelation: "snapshot_sub_sectors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
