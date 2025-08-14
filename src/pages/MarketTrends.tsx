@@ -1014,6 +1014,233 @@ const MarketTrends = () => {
 
 
 
+        {/* Trending People */}
+        <section className="py-20 bg-muted/30">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
+                Trending People
+              </h2>
+              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
+                Industry leaders and key influencers making moves in commercial real estate
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  name: "Sarah Chen",
+                  title: "Head of Real Estate, BlackRock",
+                  company: "BlackRock",
+                  image: "https://images.unsplash.com/photo-1494790108755-2616b612b5c5?w=400&q=80",
+                  trend: "Leading $2.3B industrial acquisition spree",
+                  expertise: "Industrial & Logistics"
+                },
+                {
+                  name: "Marcus Rodriguez",
+                  title: "CEO & Founder",
+                  company: "PropTech Ventures",
+                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
+                  trend: "Closed $150M Series C for AI-driven property management",
+                  expertise: "PropTech Innovation"
+                },
+                {
+                  name: "Jennifer Walsh",
+                  title: "Managing Director",
+                  company: "CBRE Capital Markets",
+                  image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
+                  trend: "Structured €800M European data center portfolio sale",
+                  expertise: "Capital Markets"
+                },
+                {
+                  name: "David Kim",
+                  title: "Senior Vice President",
+                  company: "Prologis",
+                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+                  trend: "Pioneering sustainable last-mile logistics facilities",
+                  expertise: "Sustainable Development"
+                },
+                {
+                  name: "Alexandra Foster",
+                  title: "Investment Director",
+                  company: "Brookfield Asset Management",
+                  image: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&q=80",
+                  trend: "Leading $1.8B mixed-use urban regeneration project",
+                  expertise: "Mixed-Use Development"
+                },
+                {
+                  name: "Robert Thompson",
+                  title: "Global Head of Research",
+                  company: "JLL",
+                  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80",
+                  trend: "Published groundbreaking ESG impact study",
+                  expertise: "Market Research"
+                }
+              ].map((person, index) => (
+                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-muted">
+                        <img 
+                          src={person.image} 
+                          alt={person.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-accent text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {person.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">{person.title}</p>
+                        <p className="text-sm font-medium text-primary">{person.company}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <p className="text-sm text-foreground leading-relaxed">
+                          {person.trend}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <Badge variant="outline" className="text-xs">
+                          {person.expertise}
+                        </Badge>
+                        <Button variant="ghost" size="sm" className="text-xs">
+                          View Profile
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Trending Projects */}
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
+                Trending Projects
+              </h2>
+              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
+                Notable developments and deals shaping the commercial real estate landscape
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                {
+                  name: "Hudson Yards Phase III",
+                  location: "New York, NY",
+                  type: "Mixed-Use Development",
+                  value: "$4.2B",
+                  size: "8.2M SF",
+                  status: "Under Construction",
+                  completion: "Q3 2026",
+                  developer: "Related Companies",
+                  image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
+                  highlights: ["50-story office tower", "Luxury residential", "Retail & dining"]
+                },
+                {
+                  name: "Amazon HQ2 Expansion",
+                  location: "Arlington, VA",
+                  type: "Corporate Campus",
+                  value: "$2.5B",
+                  size: "4M SF",
+                  status: "Phase 1 Complete",
+                  completion: "Q4 2025",
+                  developer: "Amazon",
+                  image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
+                  highlights: ["25,000 new jobs", "LEED Platinum", "Public transit integration"]
+                },
+                {
+                  name: "Canary Wharf Life Sciences",
+                  location: "London, UK",
+                  type: "Life Sciences Hub",
+                  value: "£1.8B",
+                  size: "2.1M SF",
+                  status: "Pre-Development",
+                  completion: "Q2 2027",
+                  developer: "Canary Wharf Group",
+                  image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
+                  highlights: ["Bio-tech facilities", "Research labs", "Innovation center"]
+                },
+                {
+                  name: "Marina Bay Financial District",
+                  location: "Singapore",
+                  type: "Financial Hub",
+                  value: "S$3.2B",
+                  size: "5.8M SF",
+                  status: "Under Construction",
+                  completion: "Q1 2026",
+                  developer: "CapitaLand",
+                  image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80",
+                  highlights: ["Grade A offices", "Integrated transport", "Sustainable design"]
+                }
+              ].map((project, index) => (
+                <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+                  <div className="aspect-video relative">
+                    <img 
+                      src={project.image} 
+                      alt={project.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="font-primary text-xl font-semibold mb-1">{project.name}</h3>
+                      <p className="text-sm opacity-90">{project.location}</p>
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Badge className="bg-white/20 text-white border-white/30">
+                        {project.status}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <div className="font-primary text-lg font-semibold text-primary">{project.value}</div>
+                        <div className="text-xs text-muted-foreground">Total Investment</div>
+                      </div>
+                      <div>
+                        <div className="font-primary text-lg font-semibold text-foreground">{project.size}</div>
+                        <div className="text-xs text-muted-foreground">Total Size</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <div className="text-sm font-medium text-foreground">{project.type}</div>
+                        <div className="text-xs text-muted-foreground">by {project.developer}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium text-foreground">{project.completion}</div>
+                        <div className="text-xs text-muted-foreground">Completion</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-xs font-medium text-foreground mb-2 uppercase tracking-wide">Key Features:</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {project.highlights.map((highlight, highlightIndex) => (
+                          <span key={highlightIndex} className="text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
       </main>
 
       <Footer />
