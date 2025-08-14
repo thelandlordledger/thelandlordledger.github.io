@@ -809,49 +809,153 @@ const MarketTrends = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {allKPIs.map((kpi, index) => {
-                const isPositive = kpi.trend === "up";
-                const IconComponent = kpi.icon;
-                return (
-                  <Card key={index} className="p-6 hover:shadow-lg transition-all duration-200 bg-background border">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-3 rounded-lg bg-muted/50">
-                        <IconComponent className="w-5 h-5 text-foreground" />
+            {/* Market Activity Section */}
+            <div className="mb-12">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Market Activity</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  coreKPIFamilies["market-activity"][0], // Transaction Volume
+                  coreKPIFamilies["market-activity"][1], // New Listings  
+                  coreKPIFamilies["market-activity"][2], // Avg Days on Market
+                  coreKPIFamilies["valuation-returns"][0] // Price Per SF
+                ].map((kpi, index) => {
+                  const isPositive = kpi.trend === "up";
+                  const IconComponent = kpi.icon;
+                  return (
+                    <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <IconComponent className="w-4 h-4 text-foreground" />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          <span>{kpi.change}</span>
+                        </div>
                       </div>
-                      <div className={`flex items-center gap-1 text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                        {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                        <span>{kpi.change}</span>
+                      
+                      <div className="h-4 mb-3">
+                        <svg className="w-full h-full" viewBox="0 0 100 16">
+                          <polyline
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                            points={kpi.sparkline.map((value, i) => 
+                              `${(i / (kpi.sparkline.length - 1)) * 100},${16 - (value / Math.max(...kpi.sparkline)) * 14}`
+                            ).join(' ')}
+                          />
+                        </svg>
                       </div>
-                    </div>
-                    
-                    {/* Simple trend line */}
-                    <div className="h-6 mb-4">
-                      <svg className="w-full h-full" viewBox="0 0 100 20">
-                        <polyline
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
-                          points={kpi.sparkline.map((value, i) => 
-                            `${(i / (kpi.sparkline.length - 1)) * 100},${20 - (value / Math.max(...kpi.sparkline)) * 18}`
-                          ).join(' ')}
-                        />
-                      </svg>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <h3 className="text-2xl font-bold text-foreground">{kpi.value}</h3>
-                      <h4 className="font-medium text-foreground">{kpi.title}</h4>
-                      <p className="text-sm text-muted-foreground">{kpi.description}</p>
-                    </div>
-                  </Card>
-                );
-              })}
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-xl font-bold text-foreground">{kpi.value}</h4>
+                        <h5 className="text-sm font-medium text-foreground">{kpi.title}</h5>
+                        <p className="text-xs text-muted-foreground">{kpi.description}</p>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
             </div>
 
+            {/* Investment Metrics Section */}
+            <div className="mb-12">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Investment Metrics</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  coreKPIFamilies["valuation-returns"][1], // Cap Rate
+                  coreKPIFamilies["occupancy-demand"][0], // Vacancy Rate
+                  coreKPIFamilies["occupancy-demand"][1], // Net Absorption
+                  coreKPIFamilies["supply-pipeline"][0] // Under Construction
+                ].map((kpi, index) => {
+                  const isPositive = kpi.trend === "up";
+                  const IconComponent = kpi.icon;
+                  return (
+                    <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <IconComponent className="w-4 h-4 text-foreground" />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          <span>{kpi.change}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="h-4 mb-3">
+                        <svg className="w-full h-full" viewBox="0 0 100 16">
+                          <polyline
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                            points={kpi.sparkline.map((value, i) => 
+                              `${(i / (kpi.sparkline.length - 1)) * 100},${16 - (value / Math.max(...kpi.sparkline)) * 14}`
+                            ).join(' ')}
+                          />
+                        </svg>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-xl font-bold text-foreground">{kpi.value}</h4>
+                        <h5 className="text-sm font-medium text-foreground">{kpi.title}</h5>
+                        <p className="text-xs text-muted-foreground">{kpi.description}</p>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
 
-            {/* AI Market Summary & Export Options */}
+            {/* Financing Metrics Section */}
+            <div className="mb-12">
+              <h3 className="font-accent text-xl font-semibold text-foreground mb-6">Financing Metrics</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  coreKPIFamilies["financing-cost"][0], // Loan Rate
+                  coreKPIFamilies["financing-cost"][1], // % Transactions Financed
+                  coreKPIFamilies["sentiment-access"][0], // Cap Rate Spread
+                  // Add a placeholder for the 4th card or duplicate one if needed
+                  coreKPIFamilies["financing-cost"][0] // Duplicate for now to fill the row
+                ].slice(0, 3).map((kpi, index) => { // Only show first 3 to match your specification
+                  const isPositive = kpi.trend === "up";
+                  const IconComponent = kpi.icon;
+                  return (
+                    <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <IconComponent className="w-4 h-4 text-foreground" />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          <span>{kpi.change}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="h-4 mb-3">
+                        <svg className="w-full h-full" viewBox="0 0 100 16">
+                          <polyline
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                            points={kpi.sparkline.map((value, i) => 
+                              `${(i / (kpi.sparkline.length - 1)) * 100},${16 - (value / Math.max(...kpi.sparkline)) * 14}`
+                            ).join(' ')}
+                          />
+                        </svg>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-xl font-bold text-foreground">{kpi.value}</h4>
+                        <h5 className="text-sm font-medium text-foreground">{kpi.title}</h5>
+                        <p className="text-xs text-muted-foreground">{kpi.description}</p>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
 
             {/* Top Movers Widget */}
             <div className="bg-muted/30 rounded-lg p-6 mb-8">
@@ -871,7 +975,6 @@ const MarketTrends = () => {
                 ))}
               </div>
             </div>
-
           </div>
         </section>
 
