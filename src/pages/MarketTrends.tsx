@@ -800,53 +800,35 @@ const MarketTrends = () => {
         {/* Market Metrics Dashboard */}
         <section className="py-20 bg-background">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="font-primary text-4xl font-semibold text-foreground mb-4">
-                Global Market Metrics
+            <div className="text-center mb-12">
+              <h2 className="font-primary text-3xl font-semibold text-foreground mb-3">
+                Market Metrics
               </h2>
-              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
-                Key performance indicators across international commercial real estate markets
+              <p className="font-secondary text-base text-muted-foreground max-w-xl mx-auto">
+                Key performance indicators international real estate markets
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-              {allKPIs.map((kpi, index) => {
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+              {allKPIs.slice(0, 3).map((kpi, index) => {
                 const isPositive = kpi.trend === "up";
                 const IconComponent = kpi.icon;
                 return (
-                  <Card key={index} className="p-6 hover-lift transition-all duration-300 group">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <IconComponent className="w-6 h-6 text-primary" />
+                  <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="p-2 rounded-lg bg-muted">
+                        <IconComponent className="w-5 h-5 text-foreground" />
                       </div>
-                      <div className={`flex items-center gap-1 ${isPositive ? 'text-primary' : 'text-destructive'}`}>
-                        {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                        <span className="text-sm font-medium">{kpi.change}</span>
+                      <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        <span className="font-medium">{kpi.change}</span>
                       </div>
                     </div>
                     
-                    {/* Mini Sparkline */}
-                    <div className="h-8 mb-3 relative">
-                      <svg className="w-full h-full" viewBox="0 0 100 20">
-                        <polyline
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          className={isPositive ? 'text-primary/60' : 'text-destructive/60'}
-                          points={kpi.sparkline.map((value, i) => 
-                            `${(i / (kpi.sparkline.length - 1)) * 100},${20 - (value / Math.max(...kpi.sparkline)) * 20}`
-                          ).join(' ')}
-                        />
-                      </svg>
-                    </div>
-                    
-                    <h3 className="font-primary text-2xl font-bold text-foreground mb-1">{kpi.value}</h3>
-                    <h4 className="font-accent font-medium text-foreground mb-2">{kpi.title}</h4>
-                    <p className="text-sm text-muted-foreground">{kpi.description}</p>
-                    <div className="mt-2">
-                      <Badge variant="outline" className="text-xs px-2 py-1">
-                        {kpi.category}
-                      </Badge>
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-bold text-foreground">{kpi.value}</h3>
+                      <h4 className="text-sm font-medium text-foreground">{kpi.title}</h4>
+                      <p className="text-xs text-muted-foreground">{kpi.description}</p>
                     </div>
                   </Card>
                 );
