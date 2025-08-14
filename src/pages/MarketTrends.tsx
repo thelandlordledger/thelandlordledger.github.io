@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign } from "lucide-react";
+import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap } from "lucide-react";
 
 const MarketTrends = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
@@ -13,6 +13,16 @@ const MarketTrends = () => {
   const [selectedCity, setSelectedCity] = useState("all");
   const [selectedSector, setSelectorSector] = useState("all");
   const [selectedSubSector, setSelectedSubSector] = useState("all");
+  const [selectedTimeWindow, setSelectedTimeWindow] = useState("rolling-12");
+
+  // Time window options
+  const timeWindows = [
+    { value: "last-month", label: "Last Month" },
+    { value: "last-quarter", label: "Last Quarter" },
+    { value: "ytd", label: "YTD" },
+    { value: "rolling-12", label: "Rolling 12 Months" },
+    { value: "custom", label: "Custom Range" }
+  ];
 
   // Hierarchical geography data structure
   const geographyData = {
@@ -164,35 +174,91 @@ const MarketTrends = () => {
   const currentCities = getCitiesForCountry(selectedRegion, selectedCountry);
   const currentSubSectors = getSubSectorsForSector(selectedSector);
 
-  const marketMetrics = [
-    {
-      title: "Global Transaction Volume",
-      value: "$2.1T",
-      change: "+12.3%",
-      trend: "up",
-      description: "YoY commercial real estate investment volume"
-    },
-    {
-      title: "Average Cap Rates",
-      value: "6.8%",
-      change: "+0.3%",
-      trend: "up",
-      description: "Weighted average across all asset classes"
-    },
-    {
-      title: "Vacancy Rates",
-      value: "9.2%",
-      change: "-1.1%",
-      trend: "down",
-      description: "Commercial properties market-wide"
-    },
-    {
-      title: "Price Per SF",
-      value: "$312",
-      change: "+8.7%",
-      trend: "up",
-      description: "Average across major markets"
-    }
+  // Enhanced KPI data with sector-specific details based on the new structure
+  const coreKPIFamilies = {
+    "market-activity": [
+      {
+        title: "Transaction Volume",
+        value: "$2.1T",
+        change: "+12.3%",
+        trend: "up",
+        description: "Value & number of transactions",
+        sparkline: [2.8, 3.1, 2.9, 3.4, 3.2, 3.6, 3.3, 3.8, 3.5, 3.9, 3.7, 4.1],
+        icon: DollarSign,
+        category: "Market Activity"
+      },
+      {
+        title: "New Listings",
+        value: "24.7K",
+        change: "+8.4%",
+        trend: "up",
+        description: "Properties newly listed",
+        sparkline: [18, 19, 21, 20, 22, 24, 23, 25, 24, 26, 25, 27],
+        icon: Building,
+        category: "Market Activity"
+      },
+      {
+        title: "Avg Days on Market",
+        value: "67",
+        change: "-5.2%",
+        trend: "down",
+        description: "Time to transaction",
+        sparkline: [82, 79, 75, 73, 71, 69, 68, 67, 66, 65, 66, 67],
+        icon: Clock,
+        category: "Market Activity"
+      }
+    ],
+    "valuation-returns": [
+      {
+        title: "Price Per SF",
+        value: "$312",
+        change: "+8.7%",
+        trend: "up",
+        description: "Average across major markets",
+        sparkline: [285, 288, 292, 295, 301, 305, 308, 310, 315, 318, 314, 312],
+        icon: Target,
+        category: "Valuation & Returns"
+      },
+      {
+        title: "Average Cap Rate",
+        value: "6.8%",
+        change: "+0.3%",
+        trend: "up",
+        description: "Weighted by transaction value",
+        sparkline: [6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.8, 6.9, 6.8, 6.8, 6.8],
+        icon: PieChart,
+        category: "Valuation & Returns"
+      }
+    ],
+    "occupancy-demand": [
+      {
+        title: "Vacancy Rate",
+        value: "9.2%",
+        change: "-1.1%",
+        trend: "down",
+        description: "Commercial properties market-wide",
+        sparkline: [11.2, 10.8, 10.5, 10.1, 9.8, 9.5, 9.3, 9.2, 9.1, 9.0, 9.1, 9.2],
+        icon: Activity,
+        category: "Occupancy & Demand"
+      },
+      {
+        title: "Net Absorption",
+        value: "12.4M SF",
+        change: "+15.6%",
+        trend: "up",
+        description: "Quarterly leasing activity",
+        sparkline: [8.2, 9.1, 9.8, 10.2, 10.8, 11.2, 11.5, 11.8, 12.1, 12.2, 12.3, 12.4],
+        icon: Zap,
+        category: "Occupancy & Demand"
+      }
+    ]
+  };
+
+  // Combine all KPIs for display
+  const allKPIs = [
+    ...coreKPIFamilies["market-activity"],
+    ...coreKPIFamilies["valuation-returns"],
+    ...coreKPIFamilies["occupancy-demand"]
   ];
 
   const regionalTrends = [
@@ -432,27 +498,75 @@ const MarketTrends = () => {
         {/* Filter Controls */}
         <section className="py-6 bg-muted/30 border-b">
           <div className="container mx-auto px-6">
-            <div className="flex items-center justify-between mb-4">
+            {/* Breadcrumb Navigation */}
+            <div className="flex items-center gap-2 mb-6 text-sm">
+              <Home className="w-4 h-4 text-muted-foreground" />
+              <span className="text-muted-foreground">Market Intelligence</span>
+              {selectedRegion !== "all" && (
+                <>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">
+                    {regions.find(r => r.value === selectedRegion)?.label}
+                  </span>
+                </>
+              )}
+              {selectedCountry !== "all" && (
+                <>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">
+                    {currentCountries.find(c => c.value === selectedCountry)?.label}
+                  </span>
+                </>
+              )}
+              {selectedCity !== "all" && (
+                <>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-foreground font-medium">
+                    {currentCities.find(c => c.value === selectedCity)?.label}
+                  </span>
+                </>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Filter className="w-4 h-4 text-primary" />
-                <h3 className="font-accent font-medium text-foreground">Market Intelligence Filters</h3>
+                <h3 className="font-accent font-medium text-foreground">Quick Data Selector</h3>
               </div>
-              {(selectedRegion !== "all" || selectedSector !== "all") && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => {
-                    setSelectedRegion("all");
-                    setSelectedCountry("all"); 
-                    setSelectedCity("all");
-                    setSelectorSector("all");
-                    setSelectedSubSector("all");
-                  }}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Clear All
-                </Button>
-              )}
+              <div className="flex items-center gap-4">
+                {/* Time Window Selector */}
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-muted-foreground" />
+                  <Select value={selectedTimeWindow} onValueChange={setSelectedTimeWindow}>
+                    <SelectTrigger className="h-8 w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeWindows.map((window) => (
+                        <SelectItem key={window.value} value={window.value}>
+                          {window.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {(selectedRegion !== "all" || selectedSector !== "all") && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      setSelectedRegion("all");
+                      setSelectedCountry("all"); 
+                      setSelectedCity("all");
+                      setSelectorSector("all");
+                      setSelectedSubSector("all");
+                    }}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Clear All
+                  </Button>
+                )}
+              </div>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -584,26 +698,45 @@ const MarketTrends = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-              {marketMetrics.map((metric, index) => {
-                const isPositive = metric.trend === "up";
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+              {allKPIs.map((kpi, index) => {
+                const isPositive = kpi.trend === "up";
+                const IconComponent = kpi.icon;
                 return (
-                  <Card key={index} className="p-6 hover-lift transition-all duration-300">
+                  <Card key={index} className="p-6 hover-lift transition-all duration-300 group">
                     <div className="flex items-start justify-between mb-4">
                       <div className="p-2 rounded-lg bg-primary/10">
-                        {index === 0 && <DollarSign className="w-6 h-6 text-primary" />}
-                        {index === 1 && <Target className="w-6 h-6 text-primary" />}
-                        {index === 2 && <Activity className="w-6 h-6 text-primary" />}
-                        {index === 3 && <PieChart className="w-6 h-6 text-primary" />}
+                        <IconComponent className="w-6 h-6 text-primary" />
                       </div>
                       <div className={`flex items-center gap-1 ${isPositive ? 'text-primary' : 'text-destructive'}`}>
                         {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                        <span className="text-sm font-medium">{metric.change}</span>
+                        <span className="text-sm font-medium">{kpi.change}</span>
                       </div>
                     </div>
-                    <h3 className="font-primary text-2xl font-bold text-foreground mb-1">{metric.value}</h3>
-                    <h4 className="font-accent font-medium text-foreground mb-2">{metric.title}</h4>
-                    <p className="text-sm text-muted-foreground">{metric.description}</p>
+                    
+                    {/* Mini Sparkline */}
+                    <div className="h-8 mb-3 relative">
+                      <svg className="w-full h-full" viewBox="0 0 100 20">
+                        <polyline
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          className={isPositive ? 'text-primary/60' : 'text-destructive/60'}
+                          points={kpi.sparkline.map((value, i) => 
+                            `${(i / (kpi.sparkline.length - 1)) * 100},${20 - (value / Math.max(...kpi.sparkline)) * 20}`
+                          ).join(' ')}
+                        />
+                      </svg>
+                    </div>
+                    
+                    <h3 className="font-primary text-2xl font-bold text-foreground mb-1">{kpi.value}</h3>
+                    <h4 className="font-accent font-medium text-foreground mb-2">{kpi.title}</h4>
+                    <p className="text-sm text-muted-foreground">{kpi.description}</p>
+                    <div className="mt-2">
+                      <Badge variant="outline" className="text-xs px-2 py-1">
+                        {kpi.category}
+                      </Badge>
+                    </div>
                   </Card>
                 );
               })}
