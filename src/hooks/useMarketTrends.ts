@@ -160,14 +160,14 @@ export const useMarketTrends = (
       setError(null);
 
       try {
-        // Build filter conditions
+        // Build filter conditions - be very specific about matching
         let regionId: string | null = null;
         let countryId: string | null = null;
         let cityId: string | null = null;
         let sectorId: string | null = null;
         let subSectorId: string | null = null;
 
-        // Get IDs for filters
+        // Get IDs for filters with exact matching
         if (regionSlug && regionSlug !== 'all') {
           const region = regions.find(r => r.slug === regionSlug);
           regionId = region?.id || null;
@@ -193,76 +193,87 @@ export const useMarketTrends = (
           subSectorId = subSector?.id || null;
         }
 
-        // Fetch metrics with filters - ONLY show data that matches ALL selected filters
+        // Build complex query that prioritizes specificity
+        // Use OR conditions to include broader data if specific data is limited
         let metricsQuery = supabase.from('snapshot_market_metrics').select('*');
         
-        if (regionId) {
+        // Apply filters based on specificity
+        if (cityId && sectorId && subSectorId) {
+          // Most specific: city + sector + subsector
+          metricsQuery = metricsQuery.or(`and(city_id.eq.${cityId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(country_id.eq.${countryId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId})`);
+        } else if (countryId && sectorId && subSectorId) {
+          // Country + sector + subsector
+          metricsQuery = metricsQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId && subSectorId) {
+          // Region + sector + subsector
+          metricsQuery = metricsQuery.or(`and(region_id.eq.${regionId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (cityId && sectorId) {
+          // City + sector
+          metricsQuery = metricsQuery.or(`and(city_id.eq.${cityId},sector_id.eq.${sectorId}),and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (countryId && sectorId) {
+          // Country + sector
+          metricsQuery = metricsQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId) {
+          // Region + sector
+          metricsQuery = metricsQuery.eq('region_id', regionId).eq('sector_id', sectorId);
+        } else if (regionId) {
+          // Region only
           metricsQuery = metricsQuery.eq('region_id', regionId);
-        }
-        if (countryId) {
-          metricsQuery = metricsQuery.eq('country_id', countryId);
-        }
-        if (cityId) {
-          metricsQuery = metricsQuery.eq('city_id', cityId);
-        }
-        if (sectorId) {
+        } else if (sectorId) {
+          // Sector only
           metricsQuery = metricsQuery.eq('sector_id', sectorId);
-        }
-        if (subSectorId) {
-          metricsQuery = metricsQuery.eq('sub_sector_id', subSectorId);
-        }
-
-        // If no filters are selected, limit to prevent showing all data
-        if (!regionId && !countryId && !cityId && !sectorId && !subSectorId) {
-          metricsQuery = metricsQuery.limit(8); // Show limited global data
+        } else {
+          // Show limited global data when no filters
+          metricsQuery = metricsQuery.limit(8);
         }
 
-        // Fetch sector intelligence with filters
+        // Apply similar logic for sector intelligence
         let intelligenceQuery = supabase.from('snapshot_sector_intelligence').select('*').eq('published', true);
         
-        if (regionId) {
+        if (countryId && sectorId && subSectorId) {
+          intelligenceQuery = intelligenceQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId && subSectorId) {
+          intelligenceQuery = intelligenceQuery.or(`and(region_id.eq.${regionId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (countryId && sectorId) {
+          intelligenceQuery = intelligenceQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId) {
+          intelligenceQuery = intelligenceQuery.eq('region_id', regionId).eq('sector_id', sectorId);
+        } else if (regionId) {
           intelligenceQuery = intelligenceQuery.eq('region_id', regionId);
-        }
-        if (countryId) {
-          intelligenceQuery = intelligenceQuery.eq('country_id', countryId);
-        }
-        if (sectorId) {
+        } else if (sectorId) {
           intelligenceQuery = intelligenceQuery.eq('sector_id', sectorId);
         }
-        if (subSectorId) {
-          intelligenceQuery = intelligenceQuery.eq('sub_sector_id', subSectorId);
-        }
 
-        // Fetch trending people with filters
+        // Apply filtering for trending people
         let peopleQuery = supabase.from('snapshot_trending_people').select('*').eq('published', true);
         
-        if (regionId) {
+        if (countryId && sectorId) {
+          peopleQuery = peopleQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId) {
+          peopleQuery = peopleQuery.eq('region_id', regionId).eq('sector_id', sectorId);
+        } else if (regionId) {
           peopleQuery = peopleQuery.eq('region_id', regionId);
-        }
-        if (countryId) {
-          peopleQuery = peopleQuery.eq('country_id', countryId);
-        }
-        if (sectorId) {
+        } else if (sectorId) {
           peopleQuery = peopleQuery.eq('sector_id', sectorId);
         }
 
-        // Fetch trending projects with filters
+        // Apply filtering for trending projects
         let projectsQuery = supabase.from('snapshot_trending_projects').select('*').eq('published', true);
         
-        if (regionId) {
+        if (cityId && sectorId && subSectorId) {
+          projectsQuery = projectsQuery.or(`and(city_id.eq.${cityId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(country_id.eq.${countryId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (countryId && sectorId && subSectorId) {
+          projectsQuery = projectsQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId},sub_sector_id.eq.${subSectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (cityId && sectorId) {
+          projectsQuery = projectsQuery.or(`and(city_id.eq.${cityId},sector_id.eq.${sectorId}),and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (countryId && sectorId) {
+          projectsQuery = projectsQuery.or(`and(country_id.eq.${countryId},sector_id.eq.${sectorId}),and(region_id.eq.${regionId},sector_id.eq.${sectorId})`);
+        } else if (regionId && sectorId) {
+          projectsQuery = projectsQuery.eq('region_id', regionId).eq('sector_id', sectorId);
+        } else if (regionId) {
           projectsQuery = projectsQuery.eq('region_id', regionId);
-        }
-        if (countryId) {
-          projectsQuery = projectsQuery.eq('country_id', countryId);
-        }
-        if (cityId) {
-          projectsQuery = projectsQuery.eq('city_id', cityId);
-        }
-        if (sectorId) {
+        } else if (sectorId) {
           projectsQuery = projectsQuery.eq('sector_id', sectorId);
-        }
-        if (subSectorId) {
-          projectsQuery = projectsQuery.eq('sub_sector_id', subSectorId);
         }
 
         const [metricsRes, intelligenceRes, peopleRes, projectsRes] = await Promise.all([
