@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { useMarketTrends } from "@/hooks/useMarketTrends";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,31 @@ const MarketTrends = () => {
   const [selectedCity, setSelectedCity] = useState("all");
   const [selectedSector, setSelectorSector] = useState("all");
   const [selectedSubSector, setSelectedSubSector] = useState("all");
+
+  // Use the market trends hook to fetch data from Supabase
+  const {
+    metrics,
+    sectorIntelligence,
+    trendingPeople,
+    trendingProjects,
+    regions: dbRegions,
+    countries: dbCountries,
+    cities: dbCities,
+    sectors: dbSectors,
+    subSectors: dbSubSectors,
+    loading,
+    error,
+    getCountriesForRegion: getDbCountriesForRegion,
+    getCitiesForCountry: getDbCitiesForCountry,
+    getSubSectorsForSector: getDbSubSectorsForSector,
+    getMetricsByCategory
+  } = useMarketTrends(
+    selectedRegion !== "all" ? selectedRegion : undefined,
+    selectedCountry !== "all" ? selectedCountry : undefined,
+    selectedCity !== "all" ? selectedCity : undefined,
+    selectedSector !== "all" ? selectedSector : undefined,
+    selectedSubSector !== "all" ? selectedSubSector : undefined
+  );
   const [selectedTimeWindow, setSelectedTimeWindow] = useState("rolling-12");
   const [selectedSubSectors, setSelectedSubSectors] = useState<string[]>([]);
   const [compareMode, setCompareMode] = useState(false);
@@ -783,12 +809,61 @@ const MarketTrends = () => {
             <div className="mb-8">
               <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Market Activity</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  coreKPIFamilies["market-activity"][0], // Transaction Volume
-                  coreKPIFamilies["market-activity"][1], // New Listings  
-                  coreKPIFamilies["market-activity"][2], // Avg Days on Market
-                  coreKPIFamilies["valuation-returns"][0] // Price Per SF
-                ].map((kpi, index) => {
+                {loading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <Card key={index} className="p-4 bg-background border">
+                      <div className="animate-pulse">
+                        <div className="h-4 bg-muted rounded mb-3"></div>
+                        <div className="h-6 bg-muted rounded mb-2"></div>
+                        <div className="h-3 bg-muted rounded"></div>
+                      </div>
+                    </Card>
+                  ))
+                ) : error ? (
+                  <Card className="p-4 bg-background border col-span-4">
+                    <p className="text-destructive">Error loading market data: {error}</p>
+                  </Card>
+                ) : getMetricsByCategory('market_activity').length > 0 ? (
+                  getMetricsByCategory('market_activity').map((metric, index) => {
+                  const isPositive = metric.change_direction === "up";
+                  const changePercentage = metric.change_percentage ? `${metric.change_percentage > 0 ? '+' : ''}${metric.change_percentage}%` : 'N/A';
+                  const sparklineData = metric.sparkline_data || [1, 2, 3, 4, 5, 6, 7];
+                  
+                  return (
+                    <Card key={metric.id} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <Activity className="w-4 h-4 text-foreground" />
+                        </div>
+                        <div className={`flex items-center gap-1 text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                          {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                          <span>{changePercentage}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="h-4 mb-3">
+                        <svg className="w-full h-full" viewBox="0 0 100 16">
+                          <polyline
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            className={`${isPositive ? 'text-green-500/60' : 'text-red-500/60'}`}
+                            points={Array.isArray(sparklineData) ? sparklineData.map((value, i) => 
+                              `${(i / (sparklineData.length - 1)) * 100},${16 - (value / Math.max(...sparklineData)) * 14}`
+                            ).join(' ') : '0,8 100,8'}
+                          />
+                        </svg>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <h4 className="text-xl font-bold text-foreground">{metric.current_value}</h4>
+                        <h5 className="text-sm font-medium text-foreground">{metric.metric_name}</h5>
+                        <p className="text-xs text-muted-foreground">{metric.metric_family}</p>
+                      </div>
+                    </Card>
+                  );
+                })) : (
+                  coreKPIFamilies["market-activity"].map((kpi, index) => {
                   const isPositive = kpi.trend === "up";
                   const IconComponent = kpi.icon;
                   return (
@@ -824,7 +899,7 @@ const MarketTrends = () => {
                       </div>
                     </Card>
                   );
-                })}
+                }))}
               </div>
             </div>
 
@@ -972,36 +1047,83 @@ const MarketTrends = () => {
             <h3 className="font-accent text-xl font-semibold text-foreground mb-4">Trending People</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  name: "Sarah Chen",
-                  title: "Head of Real Estate",
-                  company: "BlackRock",
-                  trend: "Leading $2.3B industrial acquisition spree",
-                  expertise: "Industrial & Logistics"
-                },
-                {
-                  name: "Marcus Rodriguez", 
-                  title: "CEO & Founder",
-                  company: "PropTech Ventures",
-                  trend: "Closed $150M Series C",
-                  expertise: "PropTech Innovation"
-                },
-                {
-                  name: "Jennifer Walsh",
-                  title: "Managing Director", 
-                  company: "CBRE Capital Markets",
-                  trend: "Structured €800M portfolio sale",
-                  expertise: "Capital Markets"
-                },
-                {
-                  name: "David Kim",
-                  title: "Senior Vice President",
-                  company: "Prologis", 
-                  trend: "Pioneering sustainable logistics",
-                  expertise: "Sustainable Development"
-                }
-              ].map((person, index) => (
+              {loading ? (
+                Array.from({ length: 4 }).map((_, index) => (
+                  <Card key={index} className="p-4 bg-background border">
+                    <div className="animate-pulse">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-full bg-muted"></div>
+                        <div className="w-16 h-4 bg-muted rounded"></div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-muted rounded"></div>
+                        <div className="h-3 bg-muted rounded"></div>
+                        <div className="h-3 bg-muted rounded w-3/4"></div>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              ) : trendingPeople.length > 0 ? (
+                trendingPeople.map((person, index) => {
+                  const changePercentage = person.change_percentage ? `${person.change_percentage > 0 ? '+' : ''}${person.change_percentage}%` : '';
+                  return (
+                    <Card key={person.id} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                          <span className="text-sm font-medium text-foreground">
+                            {person.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        {changePercentage && (
+                          <Badge variant="outline" className="text-xs">
+                            {changePercentage}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-1 mb-3">
+                        <h4 className="text-sm font-semibold text-foreground">{person.name}</h4>
+                        <p className="text-xs text-muted-foreground">{person.position}</p>
+                        <p className="text-xs font-medium text-primary">{person.company}</p>
+                      </div>
+                      
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {person.description}
+                      </p>
+                    </Card>
+                  );
+                })
+              ) : (
+                [
+                  {
+                    name: "Sarah Chen",
+                    title: "Head of Real Estate",
+                    company: "BlackRock",
+                    trend: "Leading $2.3B industrial acquisition spree",
+                    expertise: "Industrial & Logistics"
+                  },
+                  {
+                    name: "Marcus Rodriguez", 
+                    title: "CEO & Founder",
+                    company: "PropTech Ventures",
+                    trend: "Closed $150M Series C",
+                    expertise: "PropTech Innovation"
+                  },
+                  {
+                    name: "Jennifer Walsh",
+                    title: "Managing Director", 
+                    company: "CBRE Capital Markets",
+                    trend: "Structured €800M portfolio sale",
+                    expertise: "Capital Markets"
+                  },
+                  {
+                    name: "David Kim",
+                    title: "Senior Vice President",
+                    company: "Prologis", 
+                    trend: "Pioneering sustainable logistics",
+                    expertise: "Sustainable Development"
+                  }
+                ].map((person, index) => (
                 <Card key={index} className="p-4 hover:shadow-lg transition-all duration-200 bg-background border">
                   <div className="flex items-center justify-between mb-3">
                     <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
