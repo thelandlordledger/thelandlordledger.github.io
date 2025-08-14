@@ -448,139 +448,139 @@ const MarketTrends = () => {
         </section>
 
         {/* Filter Controls */}
-        <section className="py-8 bg-muted/30 border-b">
+        <section className="py-6 bg-muted/30 border-b">
           <div className="container mx-auto px-6">
-            <div className="flex items-center gap-4 mb-6">
-              <Filter className="w-5 h-5 text-primary" />
-              <h3 className="font-primary text-lg font-semibold text-foreground">Market Intelligence Filters</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Filter className="w-4 h-4 text-primary" />
+                <h3 className="font-accent font-medium text-foreground">Market Intelligence Filters</h3>
+              </div>
+              {(selectedRegion !== "all" || selectedSector !== "all") && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setSelectedRegion("all");
+                    setSelectedCountry("all"); 
+                    setSelectedCity("all");
+                    setSelectorSector("all");
+                    setSelectedSubSector("all");
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Clear All
+                </Button>
+              )}
             </div>
             
-            {/* Geography Filters */}
-            <div className="mb-6">
-              <h4 className="font-accent font-medium text-foreground mb-3 flex items-center gap-2">
-                <Globe className="w-4 h-4 text-primary" />
-                Geographic Scope
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Region</label>
-                  <Select value={selectedRegion} onValueChange={handleRegionChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select region" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {regions.map((region) => (
-                        <SelectItem key={region.value} value={region.value}>
-                          {region.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Country</label>
-                  <Select value={selectedCountry} onValueChange={handleCountryChange} disabled={selectedRegion === "all"}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select country" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {currentCountries.map((country) => (
-                        <SelectItem key={country.value} value={country.value}>
-                          {country.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">City</label>
-                  <Select value={selectedCity} onValueChange={setSelectedCity} disabled={selectedCountry === "all"}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select city" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {currentCities.map((city) => (
-                        <SelectItem key={city.value} value={city.value}>
-                          {city.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Region</label>
+                <Select value={selectedRegion} onValueChange={handleRegionChange}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="All Regions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {regions.map((region) => (
+                      <SelectItem key={region.value} value={region.value}>
+                        {region.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
-
-            {/* Sector Filters */}
-            <div>
-              <h4 className="font-accent font-medium text-foreground mb-3 flex items-center gap-2">
-                <Building className="w-4 h-4 text-primary" />
-                Asset Classification
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Sector</label>
-                  <Select value={selectedSector} onValueChange={handleSectorChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select sector" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {sectors.map((sector) => (
-                        <SelectItem key={sector.value} value={sector.value}>
-                          {sector.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Sub-Sector</label>
-                  <Select value={selectedSubSector} onValueChange={setSelectedSubSector} disabled={selectedSector === "all"}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select sub-sector" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {currentSubSectors.map((subSector) => (
-                        <SelectItem key={subSector.value} value={subSector.value}>
-                          {subSector.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Country</label>
+                <Select value={selectedCountry} onValueChange={handleCountryChange} disabled={selectedRegion === "all"}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="All Countries" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currentCountries.map((country) => (
+                      <SelectItem key={country.value} value={country.value}>
+                        {country.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">City</label>
+                <Select value={selectedCity} onValueChange={setSelectedCity} disabled={selectedCountry === "all"}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="All Cities" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currentCities.map((city) => (
+                      <SelectItem key={city.value} value={city.value}>
+                        {city.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Sector</label>
+                <Select value={selectedSector} onValueChange={handleSectorChange}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="All Sectors" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sectors.map((sector) => (
+                      <SelectItem key={sector.value} value={sector.value}>
+                        {sector.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Sub-Sector</label>
+                <Select value={selectedSubSector} onValueChange={setSelectedSubSector} disabled={selectedSector === "all"}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="All Sub-Sectors" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currentSubSectors.map((subSector) => (
+                      <SelectItem key={subSector.value} value={subSector.value}>
+                        {subSector.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             {/* Active Filters Display */}
             {(selectedRegion !== "all" || selectedSector !== "all") && (
-              <div className="mt-6 pt-4 border-t border-border/50">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-medium text-foreground">Active Filters:</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-4 pt-3 border-t border-border/30">
+                <div className="flex flex-wrap gap-1.5">
                   {selectedRegion !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1">
-                      <Globe className="w-3 h-3" />
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
                       {regions.find(r => r.value === selectedRegion)?.label}
                     </Badge>
                   )}
                   {selectedCountry !== "all" && (
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
                       {currentCountries.find(c => c.value === selectedCountry)?.label}
                     </Badge>
                   )}
                   {selectedCity !== "all" && (
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
                       {currentCities.find(c => c.value === selectedCity)?.label}
                     </Badge>
                   )}
                   {selectedSector !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1">
-                      <Building className="w-3 h-3" />
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
                       {sectors.find(s => s.value === selectedSector)?.label}
                     </Badge>
                   )}
                   {selectedSubSector !== "all" && (
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
                       {currentSubSectors.find(s => s.value === selectedSubSector)?.label}
                     </Badge>
                   )}
