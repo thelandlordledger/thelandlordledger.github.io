@@ -957,24 +957,6 @@ const MarketTrends = () => {
               </div>
             </div>
 
-            {/* Top Movers Widget */}
-            <div className="bg-muted/30 rounded-lg p-6 mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-accent font-semibold text-foreground">Top Market Movers</h3>
-                <Badge variant="outline" className="text-xs">
-                  {selectedTimeWindow.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                </Badge>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                {topMovers.map((mover, index) => (
-                  <div key={index} className="text-center p-3 bg-background rounded-lg border">
-                    <div className="text-lg font-bold text-primary mb-1">{mover.change}</div>
-                    <div className="text-sm font-medium text-foreground mb-1">{mover.market}</div>
-                    <div className="text-xs text-muted-foreground">{mover.sector} • {mover.period}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
