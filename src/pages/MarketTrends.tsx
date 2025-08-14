@@ -852,31 +852,6 @@ const MarketTrends = () => {
 
 
             {/* AI Market Summary & Export Options */}
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8">
-
-              {/* Export & Share Options */}
-              <div className="bg-muted/30 rounded-lg p-6">
-                <h3 className="font-accent font-semibold text-foreground mb-4">Export Data</h3>
-                <div className="space-y-3">
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                    <Download className="w-4 h-4" />
-                    Download PNG
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                    <Download className="w-4 h-4" />
-                    Export CSV Data
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                    <Share className="w-4 h-4" />
-                    Share Permalink
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
-                    <Bell className="w-4 h-4" />
-                    Set Alert Rules
-                  </Button>
-                </div>
-              </div>
-            </div>
 
             {/* Top Movers Widget */}
             <div className="bg-muted/30 rounded-lg p-6 mb-8">
