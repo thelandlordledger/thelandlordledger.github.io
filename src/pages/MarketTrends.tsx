@@ -852,37 +852,7 @@ const MarketTrends = () => {
 
 
             {/* AI Market Summary & Export Options */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              {/* AI Narrative Summary */}
-              {aiInsightVisible && (
-                <div className="lg:col-span-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-6 border border-primary/20">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                        <Zap className="w-4 h-4 text-primary" />
-                      </div>
-                      <h3 className="font-accent font-semibold text-foreground">AI Market Intelligence</h3>
-                    </div>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => setAiInsightVisible(false)}
-                      className="h-6 w-6 p-0"
-                    >
-                      ×
-                    </Button>
-                  </div>
-                  <p className="text-sm leading-relaxed text-foreground/80 mb-4">
-                    <strong>Market Summary ({selectedTimeWindow.replace('-', ' ')}):</strong> Transaction volume up 12.3% YoY driven by industrial sector strength. 
-                    Vacancy declining in major markets (-1.1%) while cap rates stabilizing at 6.8%. Strong demand in last-mile logistics and data centers. 
-                    Financing costs elevated but transaction activity remains robust in core markets.
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Info className="w-3 h-3" />
-                    <span>Analysis updated Dec 15, 2024 • Sources: CBRE, JLL, MSCI</span>
-                  </div>
-                </div>
-              )}
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8">
 
               {/* Export & Share Options */}
               <div className="bg-muted/30 rounded-lg p-6">
