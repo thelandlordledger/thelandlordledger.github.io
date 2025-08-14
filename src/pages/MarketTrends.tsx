@@ -429,15 +429,15 @@ const MarketTrends = () => {
       
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="py-20 bg-subtle-gradient relative overflow-hidden">
+        <section className="py-12 bg-subtle-gradient relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80')] bg-cover bg-center opacity-5"></div>
           <div className="relative z-10 container mx-auto px-6 text-center">
-            <h1 className="font-primary text-5xl md:text-6xl font-semibold text-foreground mb-6">
+            <h1 className="font-primary text-4xl md:text-5xl font-semibold text-foreground mb-4">
               GLOBAL MARKET
               <br />
               <span className="bg-hero-gradient bg-clip-text text-transparent">INTELLIGENCE</span>
             </h1>
-            <p className="font-secondary text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
               Comprehensive analysis of commercial real estate trends, investment opportunities, and market dynamics across global markets
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
