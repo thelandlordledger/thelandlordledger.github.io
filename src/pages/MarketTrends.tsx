@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap, Construction, CreditCard, TrendingDownIcon, BarChart4, Users, Percent, ArrowUpDown, Eye } from "lucide-react";
+import { TrendingUp, TrendingDown, ArrowRight, Calendar, BarChart3, Globe, Building, Filter, Target, PieChart, Activity, DollarSign, ChevronRight, Home, MapPin, Clock, Zap, Construction, CreditCard, TrendingDownIcon, BarChart4, Users, Percent, ArrowUpDown, Eye, Download, Share, Bell, Play, Pause, Info, ExternalLink, MapIcon, Calendar as CalendarIcon } from "lucide-react";
 
 const MarketTrends = () => {
   const [selectedRegion, setSelectedRegion] = useState("all");
@@ -17,6 +17,11 @@ const MarketTrends = () => {
   const [selectedSubSectors, setSelectedSubSectors] = useState<string[]>([]);
   const [compareMode, setCompareMode] = useState(false);
   const [compareSelections, setCompareSelections] = useState<string[]>([]);
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  const [timeTravel, setTimeTravel] = useState(false);
+  const [timeTravelYear, setTimeTravelYear] = useState(2024);
+  const [selectedKPIModal, setSelectedKPIModal] = useState<string | null>(null);
+  const [aiInsightVisible, setAiInsightVisible] = useState(true);
 
   // Time window options
   const timeWindows = [
@@ -864,6 +869,229 @@ const MarketTrends = () => {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* AI Market Summary & Export Options */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              {/* AI Narrative Summary */}
+              {aiInsightVisible && (
+                <div className="lg:col-span-2 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-6 border border-primary/20">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-primary" />
+                      </div>
+                      <h3 className="font-accent font-semibold text-foreground">AI Market Intelligence</h3>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setAiInsightVisible(false)}
+                      className="h-6 w-6 p-0"
+                    >
+                      ×
+                    </Button>
+                  </div>
+                  <p className="text-sm leading-relaxed text-foreground/80 mb-4">
+                    <strong>Market Summary ({selectedTimeWindow.replace('-', ' ')}):</strong> Transaction volume up 12.3% YoY driven by industrial sector strength. 
+                    Vacancy declining in major markets (-1.1%) while cap rates stabilizing at 6.8%. Strong demand in last-mile logistics and data centers. 
+                    Financing costs elevated but transaction activity remains robust in core markets.
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Info className="w-3 h-3" />
+                    <span>Analysis updated Dec 15, 2024 • Sources: CBRE, JLL, MSCI</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Export & Share Options */}
+              <div className="bg-muted/30 rounded-lg p-6">
+                <h3 className="font-accent font-semibold text-foreground mb-4">Export Data</h3>
+                <div className="space-y-3">
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Download className="w-4 h-4" />
+                    Download PNG
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Download className="w-4 h-4" />
+                    Export CSV Data
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Share className="w-4 h-4" />
+                    Share Permalink
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start gap-2">
+                    <Bell className="w-4 h-4" />
+                    Set Alert Rules
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Top Movers Widget */}
+            <div className="bg-muted/30 rounded-lg p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-accent font-semibold text-foreground">Top Market Movers</h3>
+                <Badge variant="outline" className="text-xs">
+                  {selectedTimeWindow.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                {topMovers.map((mover, index) => (
+                  <div key={index} className="text-center p-3 bg-background rounded-lg border">
+                    <div className="text-lg font-bold text-primary mb-1">{mover.change}</div>
+                    <div className="text-sm font-medium text-foreground mb-1">{mover.market}</div>
+                    <div className="text-xs text-muted-foreground">{mover.sector} • {mover.period}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Time Travel Slider */}
+            <div className="bg-muted/20 rounded-lg p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-primary" />
+                  <h3 className="font-accent font-semibold text-foreground">Time Travel Analysis</h3>
+                </div>
+                <Button
+                  variant={timeTravel ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setTimeTravel(!timeTravel)}
+                  className="gap-2"
+                >
+                  {timeTravel ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  {timeTravel ? "Stop" : "Play"}
+                </Button>
+              </div>
+              
+              {timeTravel && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm font-medium text-foreground min-w-[80px]">Year: {timeTravelYear}</span>
+                    <div className="flex-1">
+                      <input
+                        type="range"
+                        min="2015"
+                        max="2024"
+                        value={timeTravelYear}
+                        onChange={(e) => setTimeTravelYear(parseInt(e.target.value))}
+                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
+                      />
+                    </div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Animate market trends from 2015 to present. Historical data visualization.
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Visual Analytics Dashboard */}
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="font-primary text-3xl font-semibold text-foreground mb-4">
+                Visual Market Analytics
+              </h2>
+              <p className="font-secondary text-lg text-muted-foreground max-w-2xl mx-auto">
+                Interactive maps, trend analysis, and market visualization tools
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              {/* Choropleth Map Placeholder */}
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Global Price Heat Map</h3>
+                  <MapIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <Globe className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Interactive choropleth map</p>
+                    <p className="text-xs text-muted-foreground">Color intensity = Price/SF</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Bubble Map Placeholder */}
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Transaction Volume Bubbles</h3>
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Bubble map visualization</p>
+                    <p className="text-xs text-muted-foreground">Bubble size = Transaction volume</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Trend Lines Chart */}
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Rolling Trend Analysis</h3>
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <Activity className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">3-month & 12-month trends</p>
+                    <p className="text-xs text-muted-foreground">Price/SF • Vacancy • Cap Rates</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Calendar Heatmap */}
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Activity Calendar</h3>
+                  <CalendarIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Sales frequency heatmap</p>
+                    <p className="text-xs text-muted-foreground">Daily transaction intensity</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Pipeline Gantt & Distribution Plots */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Development Pipeline</h3>
+                  <Construction className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <BarChart4 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Gantt timeline view</p>
+                    <p className="text-xs text-muted-foreground">Start → Delivery dates</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-accent font-semibold text-foreground">Cap Rate Distribution</h3>
+                  <Target className="w-5 h-5 text-primary" />
+                </div>
+                <div className="aspect-video bg-muted/30 rounded-lg flex items-center justify-center border-2 border-dashed border-border">
+                  <div className="text-center">
+                    <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Distribution boxplot</p>
+                    <p className="text-xs text-muted-foreground">Across submarkets</p>
+                  </div>
+                </div>
+              </Card>
             </div>
           </div>
         </section>
