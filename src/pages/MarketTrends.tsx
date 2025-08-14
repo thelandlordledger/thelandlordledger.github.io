@@ -210,7 +210,7 @@ const MarketTrends = () => {
     setSelectedSubSector("all");
   };
 
-  const currentCountries = getCountriesForRegion(selectedRegion);
+  const currentCountries = getDbCountriesForRegion(selectedRegion);
   const currentCities = getCitiesForCountry(selectedRegion, selectedCountry);
   const currentSubSectors = getSubSectorsForSector(selectedSector);
 
@@ -656,7 +656,7 @@ const MarketTrends = () => {
                 <>
                   <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   <span className="text-foreground font-medium">
-                    {currentCountries.find(c => c.value === selectedCountry)?.label}
+                    {currentCountries.find(c => c.slug === selectedCountry)?.name}
                   </span>
                 </>
               )}
@@ -697,9 +697,10 @@ const MarketTrends = () => {
                     <SelectValue placeholder="All Regions" />
                   </SelectTrigger>
                   <SelectContent>
-                    {regions.map((region) => (
-                      <SelectItem key={region.value} value={region.value}>
-                        {region.label}
+                    <SelectItem value="all">All Regions</SelectItem>
+                    {dbRegions.map((region) => (
+                      <SelectItem key={region.id} value={region.slug}>
+                        {region.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -713,9 +714,10 @@ const MarketTrends = () => {
                     <SelectValue placeholder="All Countries" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="all">All Countries</SelectItem>
                     {currentCountries.map((country) => (
-                      <SelectItem key={country.value} value={country.value}>
-                        {country.label}
+                      <SelectItem key={country.id} value={country.slug}>
+                        {country.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -745,9 +747,10 @@ const MarketTrends = () => {
                     <SelectValue placeholder="All Sectors" />
                   </SelectTrigger>
                   <SelectContent>
-                    {sectors.map((sector) => (
-                      <SelectItem key={sector.value} value={sector.value}>
-                        {sector.label}
+                    <SelectItem value="all">All Sectors</SelectItem>
+                    {dbSectors.map((sector) => (
+                      <SelectItem key={sector.id} value={sector.slug}>
+                        {sector.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -782,7 +785,7 @@ const MarketTrends = () => {
                   )}
                   {selectedCountry !== "all" && (
                     <Badge variant="secondary" className="text-xs px-2 py-1">
-                      {currentCountries.find(c => c.value === selectedCountry)?.label}
+                      {currentCountries.find(c => c.slug === selectedCountry)?.name}
                     </Badge>
                   )}
                   {selectedCity !== "all" && (
