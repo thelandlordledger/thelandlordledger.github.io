@@ -25,7 +25,7 @@ export const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img 
-              src="/lovable-uploads/3073533b-5f25-413c-962c-1e0463d705fd.png" 
+              src="/lovable-uploads/8df33e50-dfc5-44a6-9acf-07177a06264c.png" 
               alt="Landlord Ledger" 
               className="h-10 w-auto"
             />
