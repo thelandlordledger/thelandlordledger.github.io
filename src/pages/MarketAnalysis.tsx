@@ -40,9 +40,9 @@ interface Article {
 
 const categoryTabs = [
   { value: "all", label: "All Articles", icon: FileText },
-  { value: "Market Trends", label: "Market Trends", icon: TrendingUp },
-  { value: "Key Deals", label: "Key Deals", icon: Target },
-  { value: "Investment Strategy", label: "Investment Strategy", icon: FileText },
+  { value: "Market", label: "Market Trends", icon: TrendingUp },
+  { value: "Transaction", label: "Key Deals", icon: Target },
+  { value: "Strategy", label: "Investment Strategy", icon: FileText },
   { value: "Profile", label: "Profile", icon: User },
   { value: "News", label: "News", icon: Newspaper },
 ];
