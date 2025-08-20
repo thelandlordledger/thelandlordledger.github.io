@@ -222,15 +222,17 @@ export default function MarketAnalysis() {
                         {article.category}
                       </div>
                       
-                      {/* Floating Metric */}
-                      <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
-                        <div className="flex items-center gap-2">
-                          <IconComponent className="w-4 h-4 text-primary" />
-                          <span className="font-accent font-bold text-sm text-foreground">
-                            {article.metric_value || `${article.view_count} views`}
-                          </span>
+                       {/* Floating Metric */}
+                      {article.metric_value && (
+                        <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
+                          <div className="flex items-center gap-2">
+                            <IconComponent className="w-4 h-4 text-primary" />
+                            <span className="font-accent font-bold text-sm text-foreground">
+                              {article.metric_value}
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                       
                       {/* Reading Time */}
                       <div className="absolute bottom-4 left-4 flex items-center gap-1 text-xs text-background bg-foreground/80 px-2 py-1 rounded-full backdrop-blur-sm">
@@ -260,10 +262,6 @@ export default function MarketAnalysis() {
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           {new Date(article.created_at).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          {article.view_count}
                         </div>
                       </div>
                       
