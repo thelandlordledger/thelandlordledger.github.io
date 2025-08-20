@@ -1,24 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card } from "@/components/ui/card";
+import { ArticleCard } from "@/components/ArticleCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FallbackImage } from "@/components/FallbackImage";
 import { 
   Search, 
-  Clock, 
   TrendingUp, 
   Target, 
   FileText, 
   Newspaper, 
-  Eye,
-  Calendar,
-  User,
-  ArrowRight
+  User
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -53,18 +47,6 @@ export default function MarketAnalysis() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
-
-  // Category to icon mapping
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'Market Trends': return TrendingUp;
-      case 'Key Deals': return Target;
-      case 'Investment Strategy': return FileText;
-      case 'Profile': return User;
-      case 'News': return Newspaper;
-      default: return FileText;
-    }
-  };
 
   // Fetch articles from Supabase
   const fetchArticles = async () => {
@@ -163,14 +145,14 @@ export default function MarketAnalysis() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="overflow-hidden">
+              <div key={i} className="overflow-hidden rounded-lg border bg-card">
                 <div className="h-48 bg-muted animate-pulse"></div>
                 <div className="p-6 space-y-3">
                   <div className="h-4 bg-muted animate-pulse rounded"></div>
                   <div className="h-4 bg-muted animate-pulse rounded w-3/4"></div>
                   <div className="h-4 bg-muted animate-pulse rounded w-1/2"></div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         ) : filteredArticles.length === 0 ? (
@@ -198,90 +180,14 @@ export default function MarketAnalysis() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredArticles.map((article) => {
-              const IconComponent = getCategoryIcon(article.category);
-              
-              return (
-                <Link 
-                  key={article.id}
-                  to={`/article/${article.slug || article.id}`}
-                  className="block"
-                >
-                  <Card className="group overflow-hidden border-0 bg-gradient-to-br from-background via-background/90 to-primary/5 backdrop-blur-sm hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02] cursor-pointer">
-                    {/* Image Section */}
-                    <div className="relative overflow-hidden h-48">
-                      <FallbackImage
-                        src={article.image_url}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
-                      
-                      {/* Floating Category */}
-                      <div className="absolute top-4 left-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-accent font-medium rounded-full">
-                        {article.category}
-                      </div>
-                      
-                      {/* Floating Metric */}
-                      <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
-                        <div className="flex items-center gap-2">
-                          <IconComponent className="w-4 h-4 text-primary" />
-                          <span className="font-accent font-bold text-sm text-foreground">
-                            {article.metric_value || `${article.view_count} views`}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Reading Time */}
-                      <div className="absolute bottom-4 left-4 flex items-center gap-1 text-xs text-background bg-foreground/80 px-2 py-1 rounded-full backdrop-blur-sm">
-                        <Clock className="w-3 h-3" />
-                        {article.read_time ? `${article.read_time} min` : '5 min'}
-                      </div>
-                    </div>
-                    
-                    {/* Content Section */}
-                    <div className="p-6 space-y-4">
-                      {/* Headlines */}
-                      <div>
-                        <h3 className="font-primary text-xl font-bold text-foreground mb-2 leading-tight group-hover:text-primary transition-colors duration-300">
-                          {article.title}
-                        </h3>
-                        <h4 className="font-secondary text-sm text-primary font-medium mb-3 line-clamp-2">
-                          {article.subtitle || 'Expert analysis and market insights'}
-                        </h4>
-                      </div>
-                      
-                      {/* Metadata */}
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <User className="h-3 w-3" />
-                          {article.author_name || 'Expert Analysis'}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(article.created_at).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          {article.view_count}
-                        </div>
-                      </div>
-                      
-                      {/* Description */}
-                      <p className="font-secondary text-muted-foreground leading-relaxed text-sm line-clamp-3">
-                        {article.excerpt || article.content?.substring(0, 150) + '...' || 'In-depth analysis providing actionable insights for sophisticated investors.'}
-                      </p>
-                      
-                      {/* CTA */}
-                      <div className="group/btn w-full flex justify-between items-center py-2 px-3 rounded-lg hover:bg-primary/10 hover:text-primary transition-all">
-                        <span className="font-medium text-sm">Read Full Analysis</span>
-                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              );
-            })}
+            {filteredArticles.map((article) => (
+              <ArticleCard 
+                key={article.id}
+                article={article}
+                variant="default"
+                showShare={false}
+              />
+            ))}
           </div>
         )}
       </main>
