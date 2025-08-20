@@ -68,10 +68,6 @@ export function ArticleCard({ article, variant = 'default', showShare = false }:
                   <Clock className="w-3 h-3" />
                   {article.read_time || 5}m
                 </span>
-                <span className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  {article.view_count}
-                </span>
               </div>
             </div>
           </div>
@@ -123,10 +119,6 @@ export function ArticleCard({ article, variant = 'default', showShare = false }:
                 <span className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
                   {article.read_time || 5} min
-                </span>
-                <span className="flex items-center gap-1">
-                  <Eye className="w-4 h-4" />
-                  {article.view_count} views
                 </span>
               </div>
 
@@ -197,10 +189,6 @@ export function ArticleCard({ article, variant = 'default', showShare = false }:
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {article.read_time || 5}m
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="w-3 h-3" />
-              {article.view_count}
             </span>
           </div>
           

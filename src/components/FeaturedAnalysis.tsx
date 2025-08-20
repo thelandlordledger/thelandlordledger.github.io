@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Clock, TrendingUp, Target, FileText, Newspaper, BarChart3 } from "lucide-react";
+import { ArrowRight, Clock, FileText } from "lucide-react";
+import { ArticleCard } from "@/components/ArticleCard";
 import { supabase } from "@/integrations/supabase/client";
 
 interface FeaturedArticle {
@@ -26,16 +26,6 @@ export const FeaturedAnalysis = () => {
   const [featuredArticles, setFeaturedArticles] = useState<FeaturedArticle[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Category to icon mapping
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'Market Trends': return TrendingUp;
-      case 'Key Deals': return Target;
-      case 'Investment Strategy': return FileText;
-      case 'News': return Newspaper;
-      default: return BarChart3;
-    }
-  };
 
   // Fetch featured articles from Supabase
   const fetchFeaturedArticles = async () => {
@@ -109,59 +99,14 @@ export const FeaturedAnalysis = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredArticles.slice(0, 9).map((article) => {
-              const IconComponent = getCategoryIcon(article.category);
-              
-              return (
-                <Card 
-                  key={article.id}
-                  className="group overflow-hidden border bg-card hover-lift hover:shadow-glow transition-all duration-500 hover:scale-[1.02]"
-                >
-                  {/* Image Section */}
-                  <div className="relative overflow-hidden h-48">
-                    <img 
-                      src={article.image_url || "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80"} 
-                      alt={article.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent"></div>
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-accent font-medium rounded-full">
-                      {article.category}
-                    </div>
-                  </div>
-                  
-                  {/* Content Section */}
-                  <div className="p-8 space-y-6">                    
-                    {/* Headlines */}
-                    <div>
-                      <h3 className="font-primary text-2xl font-bold text-foreground mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
-                        {article.title}
-                      </h3>
-                      {article.subtitle && (
-                        <p className="font-secondary text-lg text-muted-foreground leading-relaxed">
-                          {article.subtitle}
-                        </p>
-                      )}
-                    </div>
-                    
-                    {/* CTA */}
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="group/btn justify-start p-0 h-auto hover:bg-transparent hover:text-primary transition-all"
-                      asChild
-                    >
-                      <Link to={`/article/${article.slug || article.id}`}>
-                        <span className="font-medium">Read Article</span>
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                      </Link>
-                    </Button>
-                  </div>
-                </Card>
-              );
-            })}
+            {featuredArticles.slice(0, 9).map((article) => (
+              <ArticleCard 
+                key={article.id}
+                article={article}
+                variant="default"
+                showShare={false}
+              />
+            ))}
           </div>
         )}
         
