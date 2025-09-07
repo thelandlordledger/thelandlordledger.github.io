@@ -11,7 +11,7 @@ import {
     DollarSign,
     MapPin,
     Calculator,
-    ArrowUpIcon,
+    ExternalLink,
     Paperclip,
     PlusIcon,
 } from "lucide-react";
@@ -98,10 +98,10 @@ export function RealEstateAIChat() {
         <div className="flex flex-col items-center w-full max-w-4xl mx-auto p-6 space-y-8">
             <div className="text-center space-y-4">
                 <h1 className="text-4xl font-primary font-bold text-foreground">
-                    Your AI-Powered Investment Assistant
+                    Ask Your Real Estate AI Assistant
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl">
-                    Get instant insights on deals, market trends, due diligence, and investment strategies
+                    Get instant insights on market trends, property valuations, investment opportunities, and more
                 </p>
                 <p className="text-sm text-muted-foreground">
                     Powered by <a href="https://frondex.co" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">frondex.co</a>
@@ -165,9 +165,9 @@ export function RealEstateAIChat() {
                                     value.trim()
                                         ? "bg-primary text-primary-foreground hover:bg-primary/90"
                                         : "text-muted-foreground"
-                                )}
+                                 )}
                             >
-                                <ArrowUpIcon
+                                <ExternalLink
                                     className={cn(
                                         "w-4 h-4",
                                         value.trim()
