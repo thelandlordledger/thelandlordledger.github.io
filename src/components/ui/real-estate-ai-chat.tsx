@@ -83,7 +83,7 @@ export function RealEstateAIChat() {
     const handleSubmit = () => {
         if (value.trim()) {
             const query = encodeURIComponent(value.trim());
-            navigate(`/ai-chat?q=${query}`);
+            window.open(`https://frondex.co?q=${query}`, '_blank');
         }
     };
 
@@ -98,10 +98,13 @@ export function RealEstateAIChat() {
         <div className="flex flex-col items-center w-full max-w-4xl mx-auto p-6 space-y-8">
             <div className="text-center space-y-4">
                 <h1 className="text-4xl font-primary font-bold text-foreground">
-                    Ask Your Real Estate AI Assistant
+                    Your AI-Powered Investment Assistant
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl">
-                    Get instant insights on market trends, property valuations, investment opportunities, and more
+                    Get instant insights on deals, market trends, due diligence, and investment strategies
+                </p>
+                <p className="text-sm text-muted-foreground">
+                    Powered by <a href="https://frondex.co" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">frondex.co</a>
                 </p>
             </div>
 
@@ -116,7 +119,7 @@ export function RealEstateAIChat() {
                                 adjustHeight();
                             }}
                             onKeyDown={handleKeyDown}
-                            placeholder="Ask about market trends, property values, investment strategies..."
+                            placeholder="Ask me anything... (opens frondex.co in new tab)"
                             className={cn(
                                 "w-full px-4 py-3",
                                 "resize-none",
@@ -182,27 +185,27 @@ export function RealEstateAIChat() {
                     <ActionButton
                         icon={<TrendingUp className="w-4 h-4" />}
                         label="Market Analysis"
-                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What are the current real estate market trends?"))}
-                    />
-                    <ActionButton
-                        icon={<DollarSign className="w-4 h-4" />}
-                        label="Property Valuation"
-                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("How do I determine property value?"))}
-                    />
-                    <ActionButton
-                        icon={<MapPin className="w-4 h-4" />}
-                        label="Location Insights"
-                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What are the best investment locations right now?"))}
+                        onClick={() => window.open("https://frondex.co?q=" + encodeURIComponent("What are the current real estate market trends?"), '_blank')}
                     />
                     <ActionButton
                         icon={<Building2 className="w-4 h-4" />}
-                        label="Investment Opportunities"
-                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("What types of real estate investments should I consider?"))}
+                        label="Deal Sourcing"
+                        onClick={() => window.open("https://frondex.co?q=" + encodeURIComponent("How do I find good real estate deals?"), '_blank')}
+                    />
+                    <ActionButton
+                        icon={<TrendingUp className="w-4 h-4" />}
+                        label="Portfolio Performance"
+                        onClick={() => window.open("https://frondex.co?q=" + encodeURIComponent("How can I analyze my portfolio performance?"), '_blank')}
+                    />
+                    <ActionButton
+                        icon={<DollarSign className="w-4 h-4" />}
+                        label="Due Diligence"
+                        onClick={() => window.open("https://frondex.co?q=" + encodeURIComponent("What should I include in real estate due diligence?"), '_blank')}
                     />
                     <ActionButton
                         icon={<Calculator className="w-4 h-4" />}
-                        label="ROI Calculator"
-                        onClick={() => navigate("/ai-chat?q=" + encodeURIComponent("How do I calculate ROI for real estate investments?"))}
+                        label="Valuation Models"
+                        onClick={() => window.open("https://frondex.co?q=" + encodeURIComponent("What are the best real estate valuation models?"), '_blank')}
                     />
                 </div>
             </div>
