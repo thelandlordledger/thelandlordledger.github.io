@@ -55,7 +55,7 @@ const mockSlides: CarouselSlide[] = [
     description: "Leverage artificial intelligence to discover market trends and investment strategies",
     imageUrl: "/lovable-uploads/a2a90567-f17c-4437-9cad-9f68e2885544.png",
     ctaText: "Try AI Chat",
-    ctaUrl: "/ai-chat",
+    ctaUrl: "https://frondex.co",
     isActive: true,
     order: 2,
     createdAt: "2024-01-16T09:30:00Z",
